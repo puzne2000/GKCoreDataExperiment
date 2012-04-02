@@ -82,6 +82,10 @@
 		C53F703C152806AE00688163 /* GKCarpoolDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKCarpoolDB.m; sourceTree = "<group>"; };
 		C53F704215282CAE00688163 /* GKManagedDrive+CreateDrive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GKManagedDrive+CreateDrive.h"; sourceTree = "<group>"; };
 		C53F704315282CAE00688163 /* GKManagedDrive+CreateDrive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GKManagedDrive+CreateDrive.m"; sourceTree = "<group>"; };
+		C5E13BBD15291FB900997AA6 /* NSObject+GKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+GKLog.h"; sourceTree = "<group>"; };
+		C5E13BBE15291FB900997AA6 /* NSObject+GKLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+GKLog.m"; sourceTree = "<group>"; };
+		C5E13BBF15291FB900997AA6 /* GKLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKLogger.h; sourceTree = "<group>"; };
+		C5E13BC015291FB900997AA6 /* GKLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GKLogger.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,13 +108,13 @@
 		4E65518F15260B0900C64AD5 /* core data based model */ = {
 			isa = PBXGroup;
 			children = (
+				4E87C20115269604002D27EC /* Model.xcdatamodeld */,
 				C516B6F61528F191001DA3FD /* GKManagedDrive.h */,
 				C516B6FC1528F192001DA3FD /* GKManagedDebt.h */,
 				C516B6FD1528F192001DA3FD /* GKManagedDebt.m */,
 				C516B6F91528F192001DA3FD /* GKManagedDriver.h */,
 				C516B6FA1528F192001DA3FD /* GKManagedDriver.m */,
 				C516B6F71528F192001DA3FD /* GKManagedDrive.m */,
-				4E87C20115269604002D27EC /* Model.xcdatamodeld */,
 				C53F704215282CAE00688163 /* GKManagedDrive+CreateDrive.h */,
 				C53F704315282CAE00688163 /* GKManagedDrive+CreateDrive.m */,
 				C53F703B152806AE00688163 /* GKCarpoolDB.h */,
@@ -165,6 +169,7 @@
 				4E65519E1526119000C64AD5 /* GKDriverCell.m */,
 				4E87C1E515266CF7002D27EC /* from photomania */,
 				4E65518F15260B0900C64AD5 /* core data based model */,
+				C5E13BBB15291F9D00997AA6 /* logger */,
 				4E69910B152601C700E834FE /* Supporting Files */,
 			);
 			path = GKCoreDataExperiment;
@@ -197,6 +202,17 @@
 				4E87C1E815266D46002D27EC /* CoreDataTableViewController.m */,
 			);
 			name = "from photomania";
+			sourceTree = "<group>";
+		};
+		C5E13BBB15291F9D00997AA6 /* logger */ = {
+			isa = PBXGroup;
+			children = (
+				C5E13BBD15291FB900997AA6 /* NSObject+GKLog.h */,
+				C5E13BBE15291FB900997AA6 /* NSObject+GKLog.m */,
+				C5E13BBF15291FB900997AA6 /* GKLogger.h */,
+				C5E13BC015291FB900997AA6 /* GKLogger.m */,
+			);
+			name = logger;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

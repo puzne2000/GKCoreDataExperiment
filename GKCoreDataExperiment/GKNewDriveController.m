@@ -22,6 +22,8 @@
 @property (strong, nonatomic) NSMutableSet *participants;
 @property (strong, nonatomic) GKManagedDriver *driver;
 @property(strong, nonatomic) GKManagedDrive *lastDriveCreated;
+
+
 - (void)setupFetchedResultsController;
 
 enum mystates {
@@ -115,14 +117,18 @@ gkDone
         }
           
         //!!remove elements that are not participants
+        NSMutableSet *debtsToRemove;
         for (GKManagedDebt *followingDebt in driverDebts) {
             if (![self.participants containsObject:followingDebt.owedTo])
-                [driverDebts removeObject:followingDebt];
+                [debtsToRemove addObject:driverDebts];
+        }
+        for (GKManagedDebt *followingDebt in debtsToRemove) {
+            [driverDebts removeObject:followingDebt];
         }
         
         //!!if no outgoing debts, there's no cycle. return zero
         if ([driverDebts count]==0) {
-            NSLog(@"reached dead end, returning %@ (should be zero)", toRemove);
+            //NSLog(@"reached dead end, returning %@ (should be zero)", toRemove);
             return toRemove;//which is zero...   
         }
         
@@ -140,25 +146,25 @@ gkDone
     }
     
     //!!remove amount to remove, and if no debt left, remove debt. 
-    if ([toRemove floatValue]==0) NSLog(@"not removing anything");
+   // if ([toRemove floatValue]==0) NSLog(@"not removing anything");
     if ([toRemove floatValue]==[debt.sum floatValue]) {
-        NSLog(@"deleting debt to %@ by %@ on amount %@",debt.owedTo.name, debt.owedBy.name, toRemove);
+       // NSLog(@"deleting debt to %@ by %@ on amount %@",debt.owedTo.name, debt.owedBy.name, toRemove);
    [self.dbContext deleteObject:debt];
         
     } else if ([toRemove floatValue]>0) {
-        NSLog(@"decreasing debt of %@ by %@ to %@ on amount %@", debt.sum, debt.owedBy.name, debt.owedTo.name, toRemove);
+       // NSLog(@"decreasing debt of %@ by %@ to %@ on amount %@", debt.sum, debt.owedBy.name, debt.owedTo.name, toRemove);
         debt.sum=[NSNumber numberWithFloat:[debt.sum floatValue]-[toRemove floatValue]];
     }
     
     
     //!!return amount to remove
-    NSLog(@"returning %@", toRemove);
+    //NSLog(@"returning %@", toRemove);
     return toRemove;
 }
 
 -(void) eliminateDebtCycelsByDebt:(GKManagedDebt *)debt{
     //make sure all participants are zero colored
-    NSLog(@"eliminating debt cycles");
+    //NSLog(@"eliminating debt cycles");
     for (GKManagedDriver *driver in self.participants) {
         driver.color=0;
     }
@@ -215,7 +221,7 @@ gkDone
         NSLog(@"error in fetch request");
     }
     if ([debtsOwed count]>1) NSLog(@"error - multiple parallel debts");
-    NSLog(@"directly, found %d debts", [debtsOwed count]);
+    //NSLog(@"directly, found %d debts", [debtsOwed count]);
     return [debtsOwed lastObject];
     
 }
@@ -224,7 +230,7 @@ gkDone
     
     GKManagedDebt *current=[self currentDebtOf:hiker to:driver];
     if (!current) {//## should be done in new category
-        NSLog(@"no previous debt found");
+        //NSLog(@"no previous debt found");
         current = (GKManagedDebt *)[NSEntityDescription insertNewObjectForEntityForName:@"Debt" inManagedObjectContext:self.dbContext];
         current.owedBy=hiker;
         current.owedTo=driver;
@@ -239,7 +245,7 @@ gkDone
     }
     NSError *error;
     if (![self.dbContext save:&error]) NSLog(@"problem saving to db");
-    NSLog(@"now %@ owes %@ to %@",current.owedBy.name, current.sum, current.owedTo.name);
+    //NSLog(@"now %@ owes %@ to %@",current.owedBy.name, current.sum, current.owedTo.name);
     
     //if this creat a cycle, eliminate it
     [self eliminateDebtCycelsByDebt:current];
@@ -247,11 +253,11 @@ gkDone
 
 -(void) recomputeDebtWithDrive:(GKManagedDrive *)drive{
     NSSet *hikers=drive.hiker;//##rename this hiker thing?
-    NSLog(@"%d hikers to update", [hikers count]);
+    //NSLog(@"%d hikers to update", [hikers count]);
     for (GKManagedDriver *hiker in hikers) {
         
         if (!(hiker==drive.driver)) {//no loops!
-            NSLog(@"adding debt by %@ to %@", hiker.name, drive.driver.name);
+            //NSLog(@"adding debt by %@ to %@", hiker.name, drive.driver.name);
         [self addDebtBy:hiker to:drive.driver onAmount:drive.length];
        } else NSLog(@"oops, tried to add debt by the driver..");
     }
@@ -344,7 +350,7 @@ gkDone
     } else if (self.myState==gkSelectingDriver) {
         
         //add trip and compute debts
-        NSLog(@"completed selecting driver");
+        //NSLog(@"completed selecting driver");
         
         [self.participants removeObject:self.driver];//participant are now just hikers
 
@@ -352,7 +358,7 @@ gkDone
         self.lastDriveCreated= [GKManagedDrive  newDriveWithDriver:self.driver hikers:self.participants date:self.dateForDrive occured:YES inContext:self.dbContext];
         [self.dbContext insertObject:self.lastDriveCreated];
         
-        NSLog(@"added new drive %@, now computing new debts",self.lastDriveCreated);
+        //NSLog(@"added new drive %@, now computing new debts",self.lastDriveCreated);
         [self recomputeDebtWithDrive:self.lastDriveCreated];
         
         
@@ -368,7 +374,7 @@ gkDone
         UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
         currentDriverCell.detailTextLabel.text=@"---";//## should zero all cells!!
         for (GKManagedDriver *driver in self.participants) {
-                NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
+                NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:driver];
                 UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
                 currentDriverCell.detailTextLabel.text=@"---";
         }
@@ -527,7 +533,7 @@ gkDone
     
     //get global database context   
     
-    
+    /*
     NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     url = [url URLByAppendingPathComponent:@"Default Database"];
     NSLog(@"database at %@",url);
@@ -536,19 +542,20 @@ gkDone
     self.dbContext=database.managedObjectContext;
     
     [self useDocument:database];
+     */
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(databaseReady:) 
+                                                 name:@"Database Ready"
+                                               object:nil];
 
-    
-    
-    
-    
-    while (!self.dbContext) {
     self.dbContext=[GKCarpoolDB sharedContext];
-    }
-    NSLog(@"got context :%@", self.dbContext);
-   // [self setupFetchedResultsController];
+  if ([GKCarpoolDB globalDBIsReady]) [self setupFetchedResultsController];
 }
 
-
+- (void)  databaseReady:(NSNotification *) notification {
+    NSLog(@"got message that db is ready");
+    [self setupFetchedResultsController];
+}
 
 #pragma mark - View lifecycle
 
@@ -574,7 +581,7 @@ gkDone
 {
     [super viewDidLoad];
     
-    self.debug=YES;NSLog(@"debug mode");
+    self.debug=NO;NSLog(@" not debug mode");
     
     // Uncomment the following line to preserve selection between presentations.
     //self.clearsSelectionOnViewWillAppear = NO;

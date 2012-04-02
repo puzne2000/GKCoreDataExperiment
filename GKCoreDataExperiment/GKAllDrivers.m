@@ -86,11 +86,20 @@ GKManagedDriver *driver = (GKManagedDriver *)[NSEntityDescription insertNewObjec
     [super viewWillAppear:animated];
     //self.navigationController.toolbarHidden=NO;
     //get global database context   
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(databaseReady:) 
+                                                 name:@"Database Ready"
+                                               object:nil];
+    
     self.dbContext=[GKCarpoolDB sharedContext];
-    NSLog(@"got context :%@", self.dbContext);
-    [self setupFetchedResultsController];
+    if ([GKCarpoolDB globalDBIsReady]) [self setupFetchedResultsController];
 }
     
+- (void)  databaseReady:(NSNotification *) notification {
+    NSLog(@"got message that db is ready");
+    [self setupFetchedResultsController];
+}
+
 
 
 #pragma mark - View lifecycle

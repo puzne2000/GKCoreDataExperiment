@@ -12,13 +12,22 @@
 
 
 static UIManagedDocument *database ;
-static NSManagedObjectContext *centralManagedContext;
+static bool databaseIsReady;
+
++(void) notifyDBReady {
+[[NSNotificationCenter defaultCenter] 
+ postNotificationName:@"Database Ready" 
+ object:nil
+ userInfo:nil];
+}
 
 +(void)useDocument:(UIManagedDocument *) document {
     if (![[NSFileManager defaultManager] fileExistsAtPath:[document.fileURL path]]) {
         // does not exist on disk, so create it
         [document saveToURL:document.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
             NSLog(@"finished saving db for creat");
+            [GKCarpoolDB notifyDBReady];
+            databaseIsReady=YES;
             //[self setupFetchedResultsController];
             // [self fetchFlickrDataIntoDocument:self.database];
             
@@ -28,18 +37,24 @@ static NSManagedObjectContext *centralManagedContext;
         // exists on disk, but we need to open it
         [document openWithCompletionHandler:^(BOOL success) {
             NSLog(@"ljkhljkhljh");
+            [GKCarpoolDB notifyDBReady];
+            databaseIsReady=YES;
             //[self setupFetchedResultsController];
         }];
     } else if (document.documentState == UIDocumentStateNormal) {
-        centralManagedContext=document.managedObjectContext;
-
+ 
         // already open and ready to use
+        [GKCarpoolDB notifyDBReady];
+        databaseIsReady=YES;
+
         NSLog(@"db already open and ready to use!!!!!!!!!!!!!!!!!!!!");
         //[self setupFetchedResultsController];
     }
 }
 
-
++(BOOL) globalDBIsReady {
+    return databaseIsReady;
+}
 
 + (void)initialize
 {

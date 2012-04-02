@@ -11,5 +11,6 @@
 @interface GKCarpoolDB : NSObject
 
 + (NSManagedObjectContext *) sharedContext;
++(BOOL) globalDBIsReady;
 
 @end
