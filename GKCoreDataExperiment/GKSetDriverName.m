@@ -55,9 +55,11 @@
 #pragma mark - View lifecycle
 
 -(void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     NSLog(@"view willlll appear");
     self.nameField.delegate = (id <UITextFieldDelegate>) self;
     self.nameField.placeholder=self.driver.name;
+    [self.nameField becomeFirstResponder];
 }
 
 /*

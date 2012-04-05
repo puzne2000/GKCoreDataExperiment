@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
-        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
@@ -19,8 +18,8 @@
                     </tabBar>
                     <connections>
                         <segue destination="TNy-4A-Zkd" kind="relationship" relationship="viewControllers" id="uXx-cI-LzM"/>
+                        <segue destination="n9h-en-Sgs" kind="relationship" relationship="viewControllers" id="UTs-qb-69s"/>
                         <segue destination="5aY-ZI-6WP" kind="relationship" relationship="viewControllers" id="cOi-vF-hh2"/>
-                        <segue destination="WJI-eU-x75" kind="relationship" relationship="viewControllers" id="UJl-8J-QKD"/>
                     </connections>
                 </tabBarController>
             </objects>
@@ -122,12 +121,12 @@
             </objects>
             <point key="canvasLocation" x="1440" y="-190"/>
         </scene>
-        <!--Navigation Controller - Everyone-->
+        <!--Navigation Controller - People-->
         <scene sceneID="EF1-Zc-baI">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2ne-iq-0mN" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="5aY-ZI-6WP" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Everyone" image="first.png" id="2WU-mQ-ZzM"/>
+                    <tabBarItem key="tabBarItem" title="People" image="man.png" id="2WU-mQ-ZzM"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="kjc-T0-diQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -215,13 +214,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1445" y="382"/>
         </scene>
-        <!--View Controller - Debt Report-->
+        <!--debt-->
         <scene sceneID="0bR-jP-0yV">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LcQ-Pn-mFJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="WJI-eU-x75" sceneMemberID="viewController">
+                <viewController id="WJI-eU-x75" userLabel="debt" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="LJJ-iu-Rlo">
-                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableFooterView" contentMode="scaleToFill" id="7JL-cW-zZm">
@@ -259,17 +258,63 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             </tableViewCell>
                         </prototypes>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Debt Report" id="St4-Q1-GNJ"/>
+                    <tabBarItem key="tabBarItem" title="Debt Report" image="trend.png" id="St4-Q1-GNJ"/>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="695" y="958"/>
+        </scene>
+        <!--Debts View Controller - Debts report-->
+        <scene sceneID="uuN-Gt-v43">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KgB-Gj-yUc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="n9h-en-Sgs" customClass="GKDebtsViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uNP-ha-cGz">
+                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Driver Cell" textLabel="b71-Kr-uAz" detailTextLabel="KaS-PW-msg" style="IBUITableViewCellStyleSubtitle" id="0kZ-ZJ-IpV">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Pipi" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="b71-Kr-uAz">
+                                            <rect key="frame" x="10" y="1" width="30" height="20"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                            <color key="textColor" red="0.54396654209999995" green="0.05377109025" blue="0.1310775454" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="---" lineBreakMode="headTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="KaS-PW-msg">
+                                            <rect key="frame" x="10" y="21" width="17" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="n9h-en-Sgs" id="f2V-yI-aLc"/>
+                            <outlet property="delegate" destination="n9h-en-Sgs" id="HpL-Yk-FT6"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Debts report" image="trend.png" id="bc3-nM-6Na"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="1064" y="967"/>
         </scene>
         <!--Navigation Controller - New Ride-->
         <scene sceneID="N3p-rJ-oWP">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R2R-tE-w7x" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="TNy-4A-Zkd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="New Ride" image="second.png" id="13n-Af-5jv"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="New Ride" image="delivery.png" id="13n-Af-5jv"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="EJj-fd-L0m">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -337,11 +382,11 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" showsReorderControl="YES" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Driver Cell" textLabel="U8P-My-Kbz" detailTextLabel="bIG-eQ-r38" style="IBUITableViewCellStyleSubtitle" id="nNQ-UG-s3w" userLabel="DriverCell" customClass="GKDriverCell">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" showsReorderControl="YES" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Driver Cell" textLabel="U8P-My-Kbz" detailTextLabel="bIG-eQ-r38" style="IBUITableViewCellStyleSubtitle" id="nNQ-UG-s3w" userLabel="DriverCell" customClass="GKDriverCell">
                                 <rect key="frame" x="0.0" y="110" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="U8P-My-Kbz">
@@ -381,45 +426,10 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         </scene>
     </scenes>
     <resources>
-        <image name="first.png" width="30" height="30"/>
-        <image name="second.png" width="30" height="30"/>
+        <image name="delivery.png" width="52" height="52"/>
+        <image name="man.png" width="52" height="52"/>
+        <image name="trend.png" width="52" height="52"/>
     </resources>
-    <classes>
-        <class className="CoreDataTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CoreDataTableViewController.h"/>
-        </class>
-        <class className="GKAllDrivers" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKAllDrivers.h"/>
-            <relationships>
-                <relationship kind="action" name="addDriverItem:" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="GKDateChooser" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKDateChooser.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
-            </relationships>
-        </class>
-        <class className="GKDriverCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKDriverCell.h"/>
-        </class>
-        <class className="GKNewDriveController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKNewDriveController.h"/>
-            <relationships>
-                <relationship kind="action" name="participantsDriverButtonPressed:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="dateLabelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="participatnsDriverButtonLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="GKSetDriverName" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKSetDriverName.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="nameField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

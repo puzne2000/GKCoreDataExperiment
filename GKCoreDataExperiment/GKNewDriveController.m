@@ -334,6 +334,20 @@ gkDone
 
 }
 
+-(void) clearDetailTexts{
+    if (self.driver) {
+    NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
+    UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
+    currentDriverCell.detailTextLabel.text=@"---";//## should zero all cells!!
+    }
+    
+    for (GKManagedDriver *driver in self.participants) {
+        NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:driver];
+        UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
+        currentDriverCell.detailTextLabel.text=@"---";
+    }
+}
+
 - (IBAction)participantsDriverButtonPressed:(UIButton *)sender{
     
     if (self.myState==gkSelectingParticipants){
@@ -370,7 +384,7 @@ gkDone
         if (![self.dbContext save:&error]) NSLog(@"error saving");
         
     } else if (self.myState==gkDone) {
-        NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
+/*        NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
         UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
         currentDriverCell.detailTextLabel.text=@"---";//## should zero all cells!!
         for (GKManagedDriver *driver in self.participants) {
@@ -378,7 +392,8 @@ gkDone
                 UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
                 currentDriverCell.detailTextLabel.text=@"---";
         }
-        
+   */
+        [self clearDetailTexts];
         NSLog(@"new drive beginning");
         self.participatnsDriverButtonLabel.text=@"Choose Participants and Date";
         self.myState=gkSelectingParticipants;
@@ -611,6 +626,7 @@ gkDone
 {
     [super viewWillDisappear:animated];
     //self.navigationController.toolbarHidden=YES;
+    [self clearDetailTexts];
     
 }
 
