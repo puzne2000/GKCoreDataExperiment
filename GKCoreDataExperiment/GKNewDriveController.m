@@ -23,7 +23,6 @@
 @property (strong, nonatomic) GKManagedDriver *driver;
 @property(strong, nonatomic) GKManagedDrive *lastDriveCreated;
 
-//blablablablabla
 
 - (void)setupFetchedResultsController;
 
