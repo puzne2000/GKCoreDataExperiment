@@ -23,8 +23,9 @@
 }
 
 -(BOOL) textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-        NSLog(@"text sould return");
+    //[textField resignFirstResponder];
+    //    NSLog(@"text sould return");
+    [self done:nil];
      return YES;
  }
 

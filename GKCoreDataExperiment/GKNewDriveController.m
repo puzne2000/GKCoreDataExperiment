@@ -23,6 +23,7 @@
 @property (strong, nonatomic) GKManagedDriver *driver;
 @property(strong, nonatomic) GKManagedDrive *lastDriveCreated;
 
+//blablablablabla
 
 - (void)setupFetchedResultsController;
 
@@ -100,9 +101,9 @@ gkDone
     NSNumber *toRemove=[NSNumber numberWithFloat:0];
     if (!([driver.color intValue]==1)) {
         NSLog(@"didn't find cycle yet");
-            //!!amount to remove = maximum of recursive call on following debts (zero if none) (because there is at most 1 cycle!!!!!)
+        //!!amount to remove = maximum of recursive call on following debts (zero if none) (because there is at most 1 cycle!!!!!)
         //find who driver owes
-
+        
         //prepare request
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
         request.predicate=[NSPredicate predicateWithFormat:@"owedBy= %@",driver];
@@ -114,8 +115,7 @@ gkDone
         if (driverDebts == nil) {
             // Handle the error.
             NSLog(@"error in fetch request");
-        }
-          
+        }         
         //!!remove elements that are not participants
         NSMutableSet *debtsToRemove;
         for (GKManagedDebt *followingDebt in driverDebts) {
@@ -142,6 +142,7 @@ gkDone
             if (!([toRemove floatValue]==0)) break;//we found somthing to remove!
         }
     } else {//!!else (color *is* 1), amount to remove = minimum between given maximum and amount of debt
+        NSLog(@"cycle found");
         toRemove=[NSNumber numberWithFloat: MIN([max floatValue], [debt.sum floatValue])];
     }
     
@@ -184,8 +185,10 @@ gkDone
 
 -(GKManagedDebt *) currentDebtOf:(GKManagedDriver *) hiker to:(GKManagedDriver *) driver{
     NSLog(@"looking for debt of %@ to %@", hiker.name,driver.name);
-    
+   
     /*
+    //##print all debts for debug
+    NSLog(@"Prinint all debts");
     //prepare request
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
     request.predicate=nil;
@@ -200,13 +203,12 @@ gkDone
         // Handle the error.
         NSLog(@"error in fetch request");
     }
-    for (GKManaNSgedDebt *debt in debtsOwed) {
+    for (GKManagedDebt *debt in debtsOwed) {
         
             NSLog(@"found a debt of %@ to %@ indirectly", debt.owedBy.name , debt.owedTo.name);
         
     }
-
-     */
+*/
     
     //prepare request
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
@@ -215,7 +217,7 @@ gkDone
     
     //apply fetch
      NSError *error = nil;
-     NSArray * debtsOwed = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
+    NSArray *debtsOwed = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
     if (debtsOwed == nil) {
         // Handle the error.
         NSLog(@"error in fetch request");
@@ -542,33 +544,24 @@ gkDone
     //self.navigationController.toolbarHidden=NO;
     self.dateForDrive=self.dateForDrive;//sets also the date display..
     self.participants=NULL;//forget participants from previous time..
-    [self suggestDriver];//## prints appropriate label on button - name of method should be changed..
+   [self clearDetailTexts];
   
     
     
     //get global database context   
-    
-    /*
-    NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    url = [url URLByAppendingPathComponent:@"Default Database"];
-    NSLog(@"database at %@",url);
-    // url is now "<Documents Directory>/Default Database"
-    UIManagedDocument *  database = [[UIManagedDocument alloc] initWithFileURL:url]; // setter will create this for us on disk
-    self.dbContext=database.managedObjectContext;
-    
-    [self useDocument:database];
-     */
-    [[NSNotificationCenter defaultCenter] addObserver:self
+     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(databaseReady:) 
                                                  name:@"Database Ready"
                                                object:nil];
 
     self.dbContext=[GKCarpoolDB sharedContext];
-  if ([GKCarpoolDB globalDBIsReady]) [self setupFetchedResultsController];
+  if ([GKCarpoolDB globalDBIsReady]) 
+      [self setupFetchedResultsController];
+  else NSLog(@"database not ready, waiting for notification");
 }
 
 - (void)  databaseReady:(NSNotification *) notification {
-    NSLog(@"got message that db is ready");
+    NSLog(@"got notification that db is ready");
     [self setupFetchedResultsController];
 }
 

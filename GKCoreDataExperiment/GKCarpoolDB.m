@@ -67,7 +67,7 @@ static bool databaseIsReady;
         initialized = YES;
         NSURL *url = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
         url = [url URLByAppendingPathComponent:@"Default Database"];
-        NSLog(@"database at %@",url);
+        NSLog(@"database at %@",[url path]);
         // url is now "<Documents Directory>/Default Database"
         database = [[UIManagedDocument alloc] initWithFileURL:url]; // setter will create this for us on disk
         

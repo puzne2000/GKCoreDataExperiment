@@ -7,6 +7,7 @@
 //
 
 #import "GKAppDelegate.h"
+#import <Parse/Parse.h>
 
 @implementation GKAppDelegate
 
@@ -15,6 +16,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    //##perhaps put the database here?
+    [Parse setApplicationId:@"TIbItSmHDUhCs3LpiQQ2VX25dVwWnLsbuYwjP6RM" 
+                  clientKey:@"VxtGzO2mseNCl3ZOQHit6thuRELqzBearTnaT9YN"];
     return YES;
 }
 							
