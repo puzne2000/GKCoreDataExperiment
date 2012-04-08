@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="1.1" toolsVersion="2182" systemVersion="11D50d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
+        <deployment defaultVersion="1296" identifier="iOS"/>
         <development defaultVersion="4200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1181"/>
     </dependencies>
@@ -18,14 +19,14 @@
                     </tabBar>
                     <connections>
                         <segue destination="TNy-4A-Zkd" kind="relationship" relationship="viewControllers" id="uXx-cI-LzM"/>
-                        <segue destination="n9h-en-Sgs" kind="relationship" relationship="viewControllers" id="UTs-qb-69s"/>
+                        <segue destination="tOB-HH-Xcp" kind="relationship" relationship="viewControllers" id="UTs-qb-69s"/>
                         <segue destination="5aY-ZI-6WP" kind="relationship" relationship="viewControllers" id="cOi-vF-hh2"/>
                     </connections>
                 </tabBarController>
             </objects>
             <point key="canvasLocation" x="209" y="107"/>
         </scene>
-        <!--All Drivers-->
+        <!--All Drivers - Drivers-->
         <scene sceneID="W2E-gA-71y">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aKn-KY-Sft" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -62,7 +63,7 @@
                             <outlet property="delegate" destination="KrQ-ON-hgr" id="xBh-6X-SQF"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="K9Q-VB-ysX">
+                    <navigationItem key="navigationItem" title="Drivers" id="K9Q-VB-ysX">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="Bvi-uw-dPw">
                             <connections>
                                 <action selector="addDriverItem:" destination="KrQ-ON-hgr" id="Vld-8M-Rbg"/>
@@ -263,13 +264,13 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="695" y="958"/>
         </scene>
-        <!--Debts View Controller - Debts report-->
+        <!--Debts View Controller-->
         <scene sceneID="uuN-Gt-v43">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KgB-Gj-yUc" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="n9h-en-Sgs" customClass="GKDebtsViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uNP-ha-cGz">
-                        <rect key="frame" x="0.0" y="20" width="320" height="411"/>
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="black" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="uNP-ha-cGz">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -304,10 +305,17 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <outlet property="delegate" destination="n9h-en-Sgs" id="HpL-Yk-FT6"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" title="Debts report" image="trend.png" id="bc3-nM-6Na"/>
+                    <navigationItem key="navigationItem" id="QdS-Jg-lUO">
+                        <barButtonItem key="rightBarButtonItem" title="email" id="9Ut-yN-3Nx">
+                            <color key="tintColor" red="0.73893811190000003" green="0.69508422140000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="emailButton:" destination="n9h-en-Sgs" id="eVz-g9-Zib"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="1064" y="967"/>
+            <point key="canvasLocation" x="1590" y="967"/>
         </scene>
         <!--Navigation Controller - New Ride-->
         <scene sceneID="N3p-rJ-oWP">
@@ -328,7 +336,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="683" y="392"/>
         </scene>
-        <!--New Drive Controller-->
+        <!--New Drive Controller - New Trip-->
         <scene sceneID="oNx-XU-F0f">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4E6-lr-utA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -413,16 +421,33 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                             <outlet property="delegate" destination="bRP-XJ-Ml4" id="r60-TE-se7"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="ArH-o5-lk6">
-                        <nil key="title"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="New Trip" id="ArH-o5-lk6"/>
                     <connections>
                         <outlet property="dateLabelButton" destination="XWv-yY-DMD" id="qVe-xL-bNS"/>
-                        <outlet property="participatnsDriverButtonLabel" destination="Bii-TI-Qnv" id="aoo-pT-Jat"/>
+                        <outlet property="driveInfoLabel" destination="Bii-TI-Qnv" id="ZYo-25-Y9P"/>
                     </connections>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1052" y="360"/>
+        </scene>
+        <!--Navigation Controller - Debts report-->
+        <scene sceneID="M5v-VR-htQ">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kCX-tR-Eul" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController id="tOB-HH-Xcp" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Debts report" image="trend.png" id="bc3-nM-6Na"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="flC-g5-Wm6">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="n9h-en-Sgs" kind="relationship" relationship="rootViewController" id="zll-S2-ZmF"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="1064" y="967"/>
         </scene>
     </scenes>
     <resources>

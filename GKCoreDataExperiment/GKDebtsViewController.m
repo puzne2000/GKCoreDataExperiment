@@ -8,12 +8,13 @@
 
 #import "GKDebtsViewController.h"
 
-#import "GKDateChooser.h"
+//#import "GKDateChooser.h"
 #import "GKCarpoolDB.h"
 #import "GKManagedDrive+CreateDrive.h"
 #import <CoreData/CoreData.h>
 #import "GKManagedDriver.h"
 #import "GKManagedDebt.h"
+#import <MessageUI/MessageUI.h>
 
 @interface GKDebtsViewController()
 
@@ -33,13 +34,90 @@
 
 @synthesize dbContext=_dbContext;
 @synthesize participants=_participants;
+@synthesize driver=_driver;
 @synthesize populated;
-//@synthesize participatnsDriverButtonLabel = _participatnsDriverButtonLabel;
--(NSManagedObjectContext *) dbContext{
-    return _dbContext;
+
+#pragma mark - handling email report
+
+-(NSString *) debtReport{
+    NSString *report=[NSMutableString string];
+    for (GKManagedDriver *hiker in self.participants) {
+        for (GKManagedDriver *driver in self.participants) {
+            
+            NSNumber *debt=[self currentDebtOf:hiker to:driver].sum;
+            if (debt) report=[report stringByAppendingFormat:@"%@ owes %@ trips to %@ \n",hiker.name, debt, driver.name];
+            
+        }
+    }
+    return report;
 }
 
-@synthesize driver=_driver;
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled: you cancelled the operation and no email message was queued.");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved: you saved the email message in the drafts folder.");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail send: the email message is queued in the outbox. It is ready to send.");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail failed: the email message was not saved or queued, possibly due to an error.");
+            break;
+        default:
+            NSLog(@"Mail not sent.");
+            break;
+    }
+    
+    // Remove the mail view
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+
+- (IBAction)emailButton:(UIBarButtonItem *)sender {
+    {
+        if ([MFMailComposeViewController canSendMail])
+        {
+            MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+            
+            mailer.mailComposeDelegate = (id) self;
+            
+            [mailer setSubject:@"A carpool report, braught to you by Kindler Insdustries"];
+            
+            /*
+            NSArray *toRecipients = [NSArray arrayWithObjects:@"fisrtMail@example.com", @"secondMail@example.com", nil];
+            [mailer setToRecipients:toRecipients];
+            
+            
+            UIImage *myImage = [UIImage imageNamed:@"mobiletuts-logo.png"];
+            NSData *imageData = UIImagePNGRepresentation(myImage);
+            [mailer addAttachmentData:imageData mimeType:@"image/png" fileName:@"mobiletutsImage"]; 
+            */
+            
+            NSString *emailBody = [self debtReport];
+            [mailer setMessageBody:emailBody isHTML:NO];
+            
+            [self presentModalViewController:mailer animated:YES];
+
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure"
+                                                            message:@"Your device doesn't support the composer sheet"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            alert=nil;
+        }
+        
+    }
+}
 
 
 
@@ -76,7 +154,7 @@
 
 
 -(GKManagedDebt *) currentDebtOf:(GKManagedDriver *) hiker to:(GKManagedDriver *) driver{
-    NSLog(@"looking for debt of %@ to %@", hiker.name,driver.name);
+    //i think if there is no debt nil is returned
 
     //prepare request
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
@@ -90,9 +168,11 @@
         // Handle the error.
         NSLog(@"error in fetch request");
     }
-    if ([debtsOwed count]>1) NSLog(@"error - multiple parallel debts");
-    //NSLog(@"directly, found %d debts", [debtsOwed count]);
-    return [debtsOwed lastObject];
+    
+    //if ([debtsOwed count]>1) NSLog(@"error - multiple parallel debts");
+ 
+    if (![debtsOwed lastObject]) NSLog(@"returning nil for currentDebt");
+    return [debtsOwed lastObject];//might be nil i think
     
 }
 
@@ -112,107 +192,59 @@
     cell.detailTextLabel.text=string;
 }
 
--(void) clearTable {
-    self.driver=nil;
-    for (GKManagedDriver *participant in self.participants) {
-        NSIndexPath *indexOfParticipant=[self indexForDriver:participant];
-        UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:indexOfParticipant];
-        cell.highlighted=NO;
-        cell.selected=NO;
-        //UITableViewCell *participantCell= [self.tableView cellForRowAtIndexPath:indexOfParticipant];
-        [self writeOnCell:indexOfParticipant string:@"---" withColor:[UIColor grayColor]];
-    }    
-}
 
 -(void) makeDesignatedDriverOfCellIndex:(NSIndexPath *)indexPath forParticipants:(NSArray *) participants{
-    
-    [self clearTable];
     
     GKManagedDriver *driver=[self.participants objectAtIndex:indexPath.row];
      UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:indexPath];
     //## GKManagedDriver *designatedDriver= [self.tableView   objectAtIndexPath:indexPath];
 
     for (GKManagedDriver *participant in participants) {
-        NSLog(@"participant is %@", participant.name);
-        NSIndexPath *indexOfParticipant=[self indexForDriver:participant];
-        //UITableViewCell *participantCell= [self.tableView cellForRowAtIndexPath:indexOfParticipant];
-        NSNumber *sum=[self currentDebtOf:participant to:driver].sum;
-        NSString *string;
-        UIColor *color;
-        if (sum) {
-            string=[NSString stringWithFormat:@"I owe %@  %@ trips", driver.name,sum];
-            color=[UIColor redColor];
+        if (!(participant==driver)) {
             
-        } else {
-            
-            sum=[self currentDebtOf:driver to:participant].sum;
-            if (!sum) sum=[NSNumber numberWithFloat:0.0];
-            string=[NSString stringWithFormat:@"%@ owes me %@ trips", driver.name, sum];
-            color=[UIColor greenColor];
+            //NSLog(@"participant is %@", participant.name);
+            NSIndexPath *indexOfParticipant=[self indexForDriver:participant];
+            UITableViewCell *cellOfParticipat=[self.tableView cellForRowAtIndexPath:indexOfParticipant];
+            //UITableViewCell *participantCell= [self.tableView cellForRowAtIndexPath:indexOfParticipant];
+            NSNumber *sum=[self currentDebtOf:participant to:driver].sum;
+            NSString *string;
+            UIColor *color;
+            if (sum) {
+                string=[NSString stringWithFormat:@"I owe %@  %@ trips", driver.name,sum];
+                color=[UIColor orangeColor];
+                
+            } else {
+                
+                sum=[self currentDebtOf:driver to:participant].sum;
+                if (!sum) sum=[NSNumber numberWithFloat:0.0];
+                string=[NSString stringWithFormat:@"%@ owes me %@ trips", driver.name, sum];
+                color=[UIColor greenColor];
+            }
+            [self writeOnCell:indexOfParticipant string:string withColor:color];
+            cellOfParticipat.highlighted=NO;
         }
-        [self writeOnCell:indexOfParticipant string:string withColor:color];
-            
+    }
         [self writeOnCell:indexPath string:@"selected" withColor:[UIColor grayColor]];
     cell.highlighted=YES;
-    }
 }
 
-//- (IBAction)participantsDriverButtonPressed:(UIButton *)sender{
-    /*
-    if (self.myState==gkSelectingParticipants){
-        
-        if ([self.participants count]>0) {
-            self.myState=gkSelectingDriver;
-            self.participatnsDriverButtonLabel.text=@"choose driver";
-            self.driver=self.computeSuggestedDriver;
-            NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
-            [self makeDesignatedDriverOfCellIndex:currentDriverPath forParticipants:self.participants];
-            //UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
-            //currentDriverCell.detailTextLabel.text=@"Designated Driver";
-        }
-    } else if (self.myState==gkSelectingDriver) {
-        
-        //add trip and compute debts
-        //NSLog(@"completed selecting driver");
-        
-        [self.participants removeObject:self.driver];//participant are now just hikers
 
-        
-        self.lastDriveCreated= [GKManagedDrive  newDriveWithDriver:self.driver hikers:self.participants date:self.dateForDrive occured:YES inContext:self.dbContext];
-        [self.dbContext insertObject:self.lastDriveCreated];
-        
-        //NSLog(@"added new drive %@, now computing new debts",self.lastDriveCreated);
-        [self recomputeDebtWithDrive:self.lastDriveCreated];
-        
-        
-        self.myState=gkDone;
-        self.participatnsDriverButtonLabel.text=@"Done! Trip added...";
 
-        NSError *error;
+#pragma mark - Table view data source
 
-        if (![self.dbContext save:&error]) NSLog(@"error saving");
-        
-    } else if (self.myState==gkDone) {
-        NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
-        UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
-        currentDriverCell.detailTextLabel.text=@"---";//## should zero all cells!!
-        for (GKManagedDriver *driver in self.participants) {
-                NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:driver];
-                UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
-                currentDriverCell.detailTextLabel.text=@"---";
-        }
-        
-        NSLog(@"new drive beginning");
-        self.participatnsDriverButtonLabel.text=@"Choose Participants and Date";
-        self.myState=gkSelectingParticipants;
-        [self.tableView reloadData];
-        self.participants=NULL;
-        self.driver=NULL;
-        self.suspendAutomaticTrackingOfChangesInManagedObjectContext=NO;
-       
-        
-    }
-}*/
+/*
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //NSLog(@"preparing for segue %@",segue.identifier);
+    if ([segue.identifier isEqualToString:@"ChooseDate"]) {
+        ((GKDateChooser *)segue.destinationViewController).delegate = (id <GKDateChooserDelegateProtocol>) self;
+    } else NSLog(@"problem: unrecognized segue");
+
+}
+*/
+
+
+
 
 #pragma mark - Table view delegate
 
@@ -270,63 +302,31 @@
 
 
 
-#pragma mark - from photographer table view...
+#pragma mark - view lifecycle that I touched
 
-//remember to setupFetchedResultsController
-/*
-- (void)setupFetchedResultsController // attaches an NSFetchRequest to this UITableViewController
-{
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Driver"];
-    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
-    // no predicate because we want ALL the drivers
-    
-    self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
-                                                                        managedObjectContext:self.dbContext
-                                                                          sectionNameKeyPath:nil
-                                                                                   cacheName:nil];
-    NSLog(@"results controller %@", self.fetchedResultsController);
-    NSLog(@"context class: %@", [self.dbContext class]);
+-(void) clearTable {
+    self.driver=nil;
+    for (GKManagedDriver *participant in self.participants) {
+        NSIndexPath *indexOfParticipant=[self indexForDriver:participant];
+        UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:indexOfParticipant];
+        cell.highlighted=NO;
+        cell.selected=NO;
+        //UITableViewCell *participantCell= [self.tableView cellForRowAtIndexPath:indexOfParticipant];
+        [self writeOnCell:indexOfParticipant string:@"---" withColor:[UIColor grayColor]];
+    }    
 }
-*/
 
 
 
 
-
-// Override to support editing the table view.
-/*
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        
-        GKManagedDriver *driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        
-        [self.dbContext deleteObject:driver];
-        
-        
-        // Commit the change.
-        NSError *error = nil;
-        if (![self.dbContext save:&error]) {
-            // Handle the error.
-        }
-        // Update the array and table view.
-        //        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-        
-        //[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-}
-*/
-
-// 2. Make the database's setter start using it
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     NSLog(@"view will appears");
-    self.populated=NO;
     [self clearTable];
-    
+    self.populated=NO;
+   
     
     //get global database context   
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -410,90 +410,6 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-#pragma mark - Table view data source
-
-/*
- - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
- {
- #warning Potentially incomplete method implementation.
- // Return the number of sections.
- return 1;
- }
- */
-
-/*
- - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
- {
- #warning Incomplete method implementation.
- // Return the number of rows in the section.
- NSLog(@"section number %@",section);
- return 1;
- }
- */
-
-
-// 19. Support segueing from this table to any view controller that has a database @property.
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSLog(@"preparing for segue %@",segue.identifier);
-    
-    
-    if ([segue.identifier isEqualToString:@"ChooseDate"]) {
-        ((GKDateChooser *)segue.destinationViewController).delegate = (id <GKDateChooserDelegateProtocol>) self;
-        
-        /*
-         if ([segue.identifier isEqualToString:@"ChooseDate"]) {
-         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-         GKManagedDriver *driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
-         GKSetDriverName *destination=segue.destinationViewController;
-        destination.driver=driver;
-         */
-    }
-    
-    
-    /*
-     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-     GKManagedDriver *Driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
-     // be somewhat generic here (slightly advanced usage)
-     // we'll segue to ANY view controller that has a driver @property
-     if ([segue.destinationViewController respondsToSelector:@selector(setDriver:)]) {
-     // use performSelector:withObject: to send without compiler checking
-     // (which is acceptable here because we used introspection to be sure this is okay)
-     [segue.destinationViewController performSelector:@selector(setDriver:) withObject:Driver];
-     }
-     */
-}
-
-
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-
-
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
 
 @end
 

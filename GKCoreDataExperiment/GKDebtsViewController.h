@@ -15,4 +15,6 @@
 
 @property (strong, nonatomic) NSManagedObjectContext *dbContext;
 
+- (IBAction)emailButton:(UIBarButtonItem *)sender;
+
 @end

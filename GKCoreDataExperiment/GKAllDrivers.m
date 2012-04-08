@@ -10,7 +10,7 @@
 #import "GKManagedDriver.h"
 #import "GKSetDriverName.h"
 #import "GKCarpoolDB.h"
-#import <Parse/Parse.h>
+//#import <Parse/Parse.h>
 
 @implementation GKAllDrivers
 
@@ -96,12 +96,12 @@ GKManagedDriver *driver = (GKManagedDriver *)[NSEntityDescription insertNewObjec
     if ([GKCarpoolDB globalDBIsReady]) 
         [self setupFetchedResultsController];
     
-    
+ /*   
     NSLog(@"trying the parse thing");
     PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
     [testObject setObject:@"bar" forKey:@"foo"];
     [testObject save];
-
+*/
 }
     
 - (void)  databaseReady:(NSNotification *) notification {

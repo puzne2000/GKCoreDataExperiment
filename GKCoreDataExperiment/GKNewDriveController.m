@@ -22,6 +22,7 @@
 @property (strong, nonatomic) NSMutableSet *participants;
 @property (strong, nonatomic) GKManagedDriver *driver;
 @property(strong, nonatomic) GKManagedDrive *lastDriveCreated;
+@property (strong, nonatomic) UIBarButtonItem *cancelButton;
 
 
 - (void)setupFetchedResultsController;
@@ -43,27 +44,18 @@ gkDone
 
 #pragma mark - synthesizes
 
-@synthesize dbContext=_dbContext;
-@synthesize participatnsDriverButtonLabel;
-@synthesize lastDriveCreated=_lastDriveCreated;
+@synthesize dbContext=_dbContext, driveInfoLabel, lastDriveCreated=_lastDriveCreated, myState, participants=_participants, driver=_driver, dateForDrive=_dateForDrive, dateLabelButton=_dateLabelButton;
 
-//@synthesize participatnsDriverButtonLabel = _participatnsDriverButtonLabel;
 -(NSManagedObjectContext *) dbContext{
     return _dbContext;
 }
 
-@synthesize myState;
-
-@synthesize participants=_participants;
 -(NSMutableSet *) participants{
     if (!_participants) _participants=[NSMutableSet set];
     return _participants;
 }
 
 
-@synthesize driver=_driver;
-
-@synthesize dateForDrive=_dateForDrive;
 -(NSDate *) dateForDrive {//default is current date
     if (!_dateForDrive) {
         return [NSDate date];
@@ -72,15 +64,11 @@ gkDone
 }
 -(void) setDateForDrive:(NSDate *)dateForDrive{
     NSLog(@"set date for drive");
-    _dateForDrive=dateForDrive;
+    _dateForDrive=(dateForDrive==nil)?self.dateForDrive:dateForDrive;//if argument is nil, set date for today
     //this might not do anything if the dateLabel
     self.dateLabelButton.tintColor=[UIColor redColor];//just a tial
     self.dateLabelButton.titleLabel.text=[self.dateFormatter stringFromDate:dateForDrive];
 }
-
-
-@synthesize dateLabelButton = _dateLaeblButton;
-//@synthesize participantsDriverButton = _participantsDriverButton;
 
 @synthesize dateFormatter=_dateFormatter;
 -(NSDateFormatter *) dateFormatter {
@@ -91,17 +79,33 @@ gkDone
     return _dateFormatter;
 }
 
+@synthesize cancelButton=_cancelButton;
+-(UIBarButtonItem *) cancelButton {
+    if (!_cancelButton) {//init cancel button
+        _cancelButton=[ [UIBarButtonItem alloc] 
+                       initWithBarButtonSystemItem:UIBarButtonSystemItemCancel 
+                       target:self action:@selector(cancelButtonPressed:)];
+    }
+    return _cancelButton;
+}
+
+
+
+
+
+
 #pragma mark - debt and driver suggestions
 
 -(NSNumber *) recursivelyEliminateDebtCycelsByDebt:(GKManagedDebt *)debt withMaximum:(NSNumber *) max{
-    NSLog(@"recuresively eliminating debt by %@ to %@", debt.owedBy.name,debt.owedTo.name);
-    //if target of debt is not of color 1,
+
     GKManagedDriver *driver=debt.owedTo;
     NSNumber *toRemove=[NSNumber numberWithFloat:0];
-    if (!([driver.color intValue]==1)) {
-        NSLog(@"didn't find cycle yet");
+ 
+    if (!([driver.color intValue]==1)) {    //if target of debt is not of color 1,
+        
         //!!amount to remove = maximum of recursive call on following debts (zero if none) (because there is at most 1 cycle!!!!!)
-        //find who driver owes
+
+        //!!find who driver owes
         
         //prepare request
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
@@ -115,7 +119,8 @@ gkDone
             // Handle the error.
             NSLog(@"error in fetch request");
         }         
-        //!!remove elements that are not participants
+  
+        //!!remove from fetch elements that are not participants
         NSMutableSet *debtsToRemove;
         for (GKManagedDebt *followingDebt in driverDebts) {
             if (![self.participants containsObject:followingDebt.owedTo])
@@ -126,16 +131,16 @@ gkDone
         }
         
         //!!if no outgoing debts, there's no cycle. return zero
-        if ([driverDebts count]==0) {
-            //NSLog(@"reached dead end, returning %@ (should be zero)", toRemove);
-            return toRemove;//which is zero...   
-        }
+        if ([driverDebts count]==0) return toRemove;//which is zero...   
+        
         
         //!!find if any of the debts that driver owes complete a cycle
         for (GKManagedDebt *followingDebt in driverDebts) {
+            
             //the new maximum is smaller if followingDebt sum is small
             NSNumber *newMax=[NSNumber numberWithFloat:MIN([max floatValue], [followingDebt.sum floatValue])];
             
+            //recursive call
             toRemove=[self recursivelyEliminateDebtCycelsByDebt:followingDebt withMaximum:newMax];
             
             if (!([toRemove floatValue]==0)) break;//we found somthing to remove!
@@ -146,28 +151,28 @@ gkDone
     }
     
     //!!remove amount to remove, and if no debt left, remove debt. 
-   // if ([toRemove floatValue]==0) NSLog(@"not removing anything");
     if ([toRemove floatValue]==[debt.sum floatValue]) {
-       // NSLog(@"deleting debt to %@ by %@ on amount %@",debt.owedTo.name, debt.owedBy.name, toRemove);
-   [self.dbContext deleteObject:debt];
-        
-    } else if ([toRemove floatValue]>0) {
-       // NSLog(@"decreasing debt of %@ by %@ to %@ on amount %@", debt.sum, debt.owedBy.name, debt.owedTo.name, toRemove);
+        [self.dbContext deleteObject:debt];        
+    } else if ([toRemove floatValue]>0)  
         debt.sum=[NSNumber numberWithFloat:[debt.sum floatValue]-[toRemove floatValue]];
-    }
     
     
     //!!return amount to remove
-    //NSLog(@"returning %@", toRemove);
     return toRemove;
 }
 
+
+
 -(void) eliminateDebtCycelsByDebt:(GKManagedDebt *)debt{
+
+    
     //make sure all participants are zero colored
-    //NSLog(@"eliminating debt cycles");
+    //## I don't think this is needed..
+/*
     for (GKManagedDriver *driver in self.participants) {
         driver.color=0;
     }
+ */
     
     //color bottom of debt with color 1
     GKManagedDriver *initialDriver=debt.owedBy;
@@ -184,30 +189,6 @@ gkDone
 
 -(GKManagedDebt *) currentDebtOf:(GKManagedDriver *) hiker to:(GKManagedDriver *) driver{
     NSLog(@"looking for debt of %@ to %@", hiker.name,driver.name);
-   
-    /*
-    //##print all debts for debug
-    NSLog(@"Prinint all debts");
-    //prepare request
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
-    request.predicate=nil;
-    //request.predicate=[NSPredicate predicateWithFormat:@" (owedTo=%@) AND (owedBy= %@)",driver, hiker];
-    request.sortDescriptors = NULL;
-    
-    //apply fetch
-    NSError *error = nil;
-    NSMutableArray *debtsOwed = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
-    NSLog(@"found %d debts in total in the database", [debtsOwed count]);
-    if (debtsOwed == nil) {
-        // Handle the error.
-        NSLog(@"error in fetch request");
-    }
-    for (GKManagedDebt *debt in debtsOwed) {
-        
-            NSLog(@"found a debt of %@ to %@ indirectly", debt.owedBy.name , debt.owedTo.name);
-        
-    }
-*/
     
     //prepare request
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
@@ -221,35 +202,45 @@ gkDone
         // Handle the error.
         NSLog(@"error in fetch request");
     }
+    
     if ([debtsOwed count]>1) NSLog(@"error - multiple parallel debts");
     //NSLog(@"directly, found %d debts", [debtsOwed count]);
     return [debtsOwed lastObject];
     
 }
 
+
+
 -(void) addDebtBy:(GKManagedDriver *)hiker to:(GKManagedDriver *)driver onAmount:(NSNumber *) sum{
     
-    GKManagedDebt *current=[self currentDebtOf:hiker to:driver];
-    if (!current) {//## should be done in new category
+    //convert negative sums to positive sums
+    float  floatSum=[sum floatValue];
+    if (floatSum<0) {
+        [self addDebtBy:driver to:hiker onAmount:[NSNumber numberWithFloat:(-floatSum)]];
+        return;
+    }
+    
+    GKManagedDebt *currentDebt=[self currentDebtOf:hiker to:driver];
+    if (!currentDebt) {//## should be done in new category
         //NSLog(@"no previous debt found");
-        current = (GKManagedDebt *)[NSEntityDescription insertNewObjectForEntityForName:@"Debt" inManagedObjectContext:self.dbContext];
-        current.owedBy=hiker;
-        current.owedTo=driver;
-        current.sum= [NSNumber numberWithFloat:
-                      ([current.sum floatValue]+[sum floatValue])];
+        currentDebt = (GKManagedDebt *)[NSEntityDescription insertNewObjectForEntityForName:@"Debt" inManagedObjectContext:self.dbContext];
+        currentDebt.owedBy=hiker;
+        currentDebt.owedTo=driver;
+        currentDebt.sum= [NSNumber numberWithFloat:
+                      ([currentDebt.sum floatValue]+[sum floatValue])];
         if ((!hiker)||(!driver)) NSLog(@"added incomplete debt - serious problem!!!");
     } else {
         
-    NSLog(@"found existing debt of %f from %@ to %@",  [current.sum floatValue],current.owedBy.name, current.owedTo.name);
-    current.sum= [NSNumber numberWithFloat:
-                  ([current.sum floatValue]+[sum floatValue])];
+    NSLog(@"found existing debt of %f from %@ to %@",  [currentDebt.sum floatValue],currentDebt.owedBy.name, currentDebt.owedTo.name);
+    currentDebt.sum= [NSNumber numberWithFloat:
+                  ([currentDebt.sum floatValue]+[sum floatValue])];
     }
     NSError *error;
     if (![self.dbContext save:&error]) NSLog(@"problem saving to db");
     //NSLog(@"now %@ owes %@ to %@",current.owedBy.name, current.sum, current.owedTo.name);
     
     //if this creat a cycle, eliminate it
-    [self eliminateDebtCycelsByDebt:current];
+    [self eliminateDebtCycelsByDebt:currentDebt];
 }
 
 -(void) recomputeDebtWithDrive:(GKManagedDrive *)drive{
@@ -302,7 +293,9 @@ gkDone
     }
 }
 
--(void) suggestDriver {
+
+-(void) suggestDriver {//computes suggested driver and presents suggestion on tableview
+    
     GKManagedDriver *driver=[self computeSuggestedDriver];
     NSString *textForButton;
     if (driver)
@@ -310,7 +303,7 @@ gkDone
                                                      @"%@ should drive", driver.name];
     else  textForButton = @"Choose travelers";
         
-    self.participatnsDriverButtonLabel.text =textForButton;
+    self.driveInfoLabel.text =textForButton;
 }
 
 
@@ -318,91 +311,95 @@ gkDone
 
 
 -(void) makeDesignatedDriverOfCellIndex:(NSIndexPath *)indexPath forParticipants:(NSSet *) participants{
-    NSLog(@"making designated driver for %d participants", [participants count]);
-    UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:indexPath];
+ 
+    UITableViewCell *driverCell=[self.tableView cellForRowAtIndexPath:indexPath];
     GKManagedDriver *designatedDriver= [self.fetchedResultsController   objectAtIndexPath:indexPath];
-
+    
+    if ([participants containsObject:designatedDriver]) { 
+    
     for (GKManagedDriver *participant in participants) {
+        
         NSLog(@"participant is %@", participant.name);
         UITableViewCell *participantCell= [self.tableView cellForRowAtIndexPath:[self.fetchedResultsController indexPathForObject:participant]];
         NSNumber *sum=[self currentDebtOf:designatedDriver to:participant].sum;
         if (!sum) sum=[NSNumber numberWithFloat:0.00];
         participantCell.detailTextLabel.text=[NSString stringWithFormat:
-                                               @"owed %@ by current Driver", sum];
+                                               @"%@ owes me %@ trips",designatedDriver.name, sum];
     }
-    cell.detailTextLabel.text=@"Designated Driver";
-    cell.highlighted=YES;
+    driverCell.detailTextLabel.text=@"Designated Driver";
+    driverCell.highlighted=YES;
 
+    } else {//attempt to select driver which is not a participant - not supposed to happen
+        NSLog(@"attempted making a non participant into driver");
+        //driverCell.highlighted=NO;
+    }
 }
 
--(void) clearDetailTexts{
+-(void) clearDetailTexts{//reset text and deselect cells
     if (self.driver) {
     NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
     UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
     currentDriverCell.detailTextLabel.text=@"---";//## should zero all cells!!
+        currentDriverCell.selected=NO;
+        currentDriverCell.highlighted=NO;
     }
     
     for (GKManagedDriver *driver in self.participants) {
         NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:driver];
         UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
         currentDriverCell.detailTextLabel.text=@"---";
+        currentDriverCell.selected=NO;
+        currentDriverCell.highlighted=NO;
     }
 }
 
 - (IBAction)participantsDriverButtonPressed:(UIButton *)sender{
     
     if (self.myState==gkSelectingParticipants){
-        
-        if ([self.participants count]>0) {
+        if ([self.participants count]>0) {//ok to move to next stage
+            
             self.myState=gkSelectingDriver;
-            self.participatnsDriverButtonLabel.text=@"choose driver";
+            self.driveInfoLabel.text=@"choose driver";
+            
+            //set initial driver suggestion
+            
             self.driver=self.computeSuggestedDriver;
             NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
             [self makeDesignatedDriverOfCellIndex:currentDriverPath forParticipants:self.participants];
-            //UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
-            //currentDriverCell.detailTextLabel.text=@"Designated Driver";
-        }
+            
+            //add cancel button
+            self.navigationItem.leftBarButtonItem=self.cancelButton;
+        } 
     } else if (self.myState==gkSelectingDriver) {
         
-        //add trip and compute debts
-        //NSLog(@"completed selecting driver");
+        //add trip to database
         
         [self.participants removeObject:self.driver];//participant are now just hikers
-
         
-        self.lastDriveCreated= [GKManagedDrive  newDriveWithDriver:self.driver hikers:self.participants date:self.dateForDrive occured:YES inContext:self.dbContext];
-        [self.dbContext insertObject:self.lastDriveCreated];
+        self.lastDriveCreated= [GKManagedDrive  
+                                newDriveWithDriver:self.driver 
+                                hikers:self.participants 
+                                date:self.dateForDrive 
+                                occured:YES 
+                                inContext:self.dbContext];
         
-        //NSLog(@"added new drive %@, now computing new debts",self.lastDriveCreated);
-        [self recomputeDebtWithDrive:self.lastDriveCreated];
-        
-        
-        self.myState=gkDone;
-        self.participatnsDriverButtonLabel.text=@"Done! Trip added...";
-
         NSError *error;
-
         if (![self.dbContext save:&error]) NSLog(@"error saving");
         
-    } else if (self.myState==gkDone) {
-/*        NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:self.driver];
-        UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
-        currentDriverCell.detailTextLabel.text=@"---";//## should zero all cells!!
-        for (GKManagedDriver *driver in self.participants) {
-                NSIndexPath *currentDriverPath=[self.fetchedResultsController indexPathForObject:driver];
-                UITableViewCell *currentDriverCell= [self.tableView cellForRowAtIndexPath:currentDriverPath];
-                currentDriverCell.detailTextLabel.text=@"---";
-        }
-   */
-        [self clearDetailTexts];
-        NSLog(@"new drive beginning");
-        self.participatnsDriverButtonLabel.text=@"Choose Participants and Date";
-        self.myState=gkSelectingParticipants;
-        [self.tableView reloadData];
-        self.participants=NULL;
-        self.driver=NULL;
-        self.suspendAutomaticTrackingOfChangesInManagedObjectContext=NO;
         
+        //updates debts with new drive
+        
+        [self recomputeDebtWithDrive:self.lastDriveCreated];
+        
+        //set internal state
+        self.myState=gkDone;
+        self.driveInfoLabel.text=@"Done! Trip added...";
+        self.navigationItem.leftBarButtonItem=nil;
+        
+    } else if (self.myState==gkDone) {
+        
+        [self resetDrive];
+        self.suspendAutomaticTrackingOfChangesInManagedObjectContext=NO;
         
     }
 }
@@ -441,7 +438,10 @@ gkDone
             cell.highlighted=YES;
             self.driver=driver;
             [self makeDesignatedDriverOfCellIndex:indexPath forParticipants:self.participants];
-        } else cell.highlighted=NO;
+        } else {
+                cell.highlighted=NO;
+            cell.selected=NO;
+        }
     }
     
     //[[tableView cellForRowAtIndexPath:indexPath] setHighlighted:YES];
@@ -453,6 +453,106 @@ gkDone
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
 }
+
+#pragma mark - Table view data source
+
+/*
+ - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+ {
+ #warning Potentially incomplete method implementation.
+ // Return the number of sections.
+ return 1;
+ }
+ */
+
+/*
+ - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+ {
+ #warning Incomplete method implementation.
+ // Return the number of rows in the section.
+ NSLog(@"section number %@",section);
+ return 1;
+ }
+ */
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Driver Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    // Configure the cell...
+    GKManagedDriver *driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    cell.textLabel.text =driver.name;
+    return cell;
+}
+
+
+// 19. Support segueing from this table to any view controller that has a database @property.
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"preparing for segue %@",segue.identifier);
+    
+    
+    if ([segue.identifier isEqualToString:@"ChooseDate"]) {
+        ((GKDateChooser *)segue.destinationViewController).delegate = (id <GKDateChooserDelegateProtocol>) self;
+        
+        /*
+         if ([segue.identifier isEqualToString:@"ChooseDate"]) {
+         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+         GKManagedDriver *driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
+         GKSetDriverName *destination=segue.destinationViewController;
+         destination.driver=driver;
+         */
+    }
+    
+    
+    /*
+     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
+     GKManagedDriver *Driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
+     // be somewhat generic here (slightly advanced usage)
+     // we'll segue to ANY view controller that has a driver @property
+     if ([segue.destinationViewController respondsToSelector:@selector(setDriver:)]) {
+     // use performSelector:withObject: to send without compiler checking
+     // (which is acceptable here because we used introspection to be sure this is okay)
+     [segue.destinationViewController performSelector:@selector(setDriver:) withObject:Driver];
+     }
+     */
+}
+
+
+
+/*
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
+
+
+
+
+/*
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
+
+/*
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
 
 #pragma mark - date selector delegate
 
@@ -535,16 +635,29 @@ gkDone
     }
 }
 
+
+- (void) resetDrive {
+    NSLog(@"resetting drive");
+    [self clearDetailTexts];
+    self.participants=NULL;//forget participants from previous time..
+    self.driveInfoLabel.text=@"Choose Participants and Date";
+    //[self.tableView reloadData];//I don't think it's needed
+    self.driver=NULL;
+    self.dateForDrive=[NSDate date];
+    self.myState=gkSelectingParticipants;
+    self.navigationItem.leftBarButtonItem=nil;
+}
+
+- (void) cancelButtonPressed:(id) sender {
+    [self resetDrive];
+}
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"view will appears");
-     self.myState=gkSelectingParticipants;
-    //self.navigationController.toolbarHidden=NO;
-    self.dateForDrive=self.dateForDrive;//sets also the date display..
-    self.participants=NULL;//forget participants from previous time..
-   [self clearDetailTexts];
-  
+    
+    [self resetDrive];//forget participants and data from last time, set date for today, clear table from old text and selection (hopefully)
     
     
     //get global database context   
@@ -565,6 +678,7 @@ gkDone
 }
 
 #pragma mark - View lifecycle
+
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -601,7 +715,7 @@ gkDone
 - (void)viewDidUnload
 {
     [self setDateLabelButton:nil];
-    [self setParticipatnsDriverButtonLabel:nil];
+    [self setDriveInfoLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -633,105 +747,6 @@ gkDone
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-#pragma mark - Table view data source
-
-/*
- - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
- {
- #warning Potentially incomplete method implementation.
- // Return the number of sections.
- return 1;
- }
- */
-
-/*
- - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
- {
- #warning Incomplete method implementation.
- // Return the number of rows in the section.
- NSLog(@"section number %@",section);
- return 1;
- }
- */
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Driver Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    // Configure the cell...
-    GKManagedDriver *driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text =driver.name;
-    return cell;
-}
-
-
-// 19. Support segueing from this table to any view controller that has a database @property.
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    NSLog(@"preparing for segue %@",segue.identifier);
-    
-    
-    if ([segue.identifier isEqualToString:@"ChooseDate"]) {
-        ((GKDateChooser *)segue.destinationViewController).delegate = (id <GKDateChooserDelegateProtocol>) self;
-        
-        /*
-         if ([segue.identifier isEqualToString:@"ChooseDate"]) {
-         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-         GKManagedDriver *driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
-         GKSetDriverName *destination=segue.destinationViewController;
-        destination.driver=driver;
-         */
-    }
-    
-    
-    /*
-     NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
-     GKManagedDriver *Driver = [self.fetchedResultsController objectAtIndexPath:indexPath];
-     // be somewhat generic here (slightly advanced usage)
-     // we'll segue to ANY view controller that has a driver @property
-     if ([segue.destinationViewController respondsToSelector:@selector(setDriver:)]) {
-     // use performSelector:withObject: to send without compiler checking
-     // (which is acceptable here because we used introspection to be sure this is okay)
-     [segue.destinationViewController performSelector:@selector(setDriver:) withObject:Driver];
-     }
-     */
-}
-
-
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-
-
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
 
 @end
 

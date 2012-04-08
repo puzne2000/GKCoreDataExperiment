@@ -17,7 +17,7 @@
 @property (strong, nonatomic) NSManagedObjectContext *dbContext;
 
 
-@property (weak, nonatomic) IBOutlet UILabel *participatnsDriverButtonLabel;
+@property (weak, nonatomic) IBOutlet UILabel *driveInfoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *dateLabelButton;
 //@property (weak, nonatomic) IBOutlet UIButton *participantsDriverButton;
 
