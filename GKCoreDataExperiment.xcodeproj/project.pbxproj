@@ -34,7 +34,6 @@
 		C516B6FE1528F192001DA3FD /* GKManagedDebt.m in Sources */ = {isa = PBXBuildFile; fileRef = C516B6FD1528F192001DA3FD /* GKManagedDebt.m */; };
 		C53F703D152806AE00688163 /* GKCarpoolDB.m in Sources */ = {isa = PBXBuildFile; fileRef = C53F703C152806AE00688163 /* GKCarpoolDB.m */; };
 		C53F704415282CAE00688163 /* GKManagedDrive+CreateDrive.m in Sources */ = {isa = PBXBuildFile; fileRef = C53F704315282CAE00688163 /* GKManagedDrive+CreateDrive.m */; };
-		C55E2AC7152DB1DE002D297A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AC6152DB1DE002D297A /* Parse.framework */; };
 		C55E2ACA152DB212002D297A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AC9152DB212002D297A /* AudioToolbox.framework */; };
 		C55E2ACC152DB222002D297A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2ACB152DB222002D297A /* CFNetwork.framework */; };
 		C55E2ACE152DB22F002D297A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2ACD152DB22F002D297A /* SystemConfiguration.framework */; };
@@ -42,6 +41,8 @@
 		C55E2AD2152DB258002D297A /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD1152DB258002D297A /* libz.1.1.3.dylib */; };
 		C55E2AD4152DB262002D297A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD3152DB262002D297A /* Security.framework */; };
 		C55E2AD6152DB272002D297A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD5152DB272002D297A /* QuartzCore.framework */; };
+		C5B1CB0C15324D8200610E34 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B1CB0B15324D8200610E34 /* MessageUI.framework */; };
+		C5B1CB0E1532549F00610E34 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B1CB0D1532549F00610E34 /* Parse.framework */; };
 		C5FDC7D31529D134001E77B8 /* delivery.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D11529D134001E77B8 /* delivery.png */; };
 		C5FDC7D41529D134001E77B8 /* trend.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D21529D134001E77B8 /* trend.png */; };
 		C5FDC7D71529D1B5001E77B8 /* man.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D61529D1B5001E77B8 /* man.png */; };
@@ -91,7 +92,6 @@
 		C53F703C152806AE00688163 /* GKCarpoolDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKCarpoolDB.m; sourceTree = "<group>"; };
 		C53F704215282CAE00688163 /* GKManagedDrive+CreateDrive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GKManagedDrive+CreateDrive.h"; sourceTree = "<group>"; };
 		C53F704315282CAE00688163 /* GKManagedDrive+CreateDrive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GKManagedDrive+CreateDrive.m"; sourceTree = "<group>"; };
-		C55E2AC6152DB1DE002D297A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		C55E2AC9152DB212002D297A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C55E2ACB152DB222002D297A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C55E2ACD152DB22F002D297A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -99,6 +99,9 @@
 		C55E2AD1152DB258002D297A /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
 		C55E2AD3152DB262002D297A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C55E2AD5152DB272002D297A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C5B1CB0915324D6200610E34 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Parse.framework; sourceTree = "<group>"; };
+		C5B1CB0B15324D8200610E34 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		C5B1CB0D1532549F00610E34 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		C5E13BBD15291FB900997AA6 /* NSObject+GKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+GKLog.h"; sourceTree = "<group>"; };
 		C5E13BBE15291FB900997AA6 /* NSObject+GKLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+GKLog.m"; sourceTree = "<group>"; };
 		C5E13BBF15291FB900997AA6 /* GKLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKLogger.h; sourceTree = "<group>"; };
@@ -115,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5B1CB0C15324D8200610E34 /* MessageUI.framework in Frameworks */,
 				C55E2AD6152DB272002D297A /* QuartzCore.framework in Frameworks */,
 				C55E2AD4152DB262002D297A /* Security.framework in Frameworks */,
 				C55E2AD2152DB258002D297A /* libz.1.1.3.dylib in Frameworks */,
@@ -128,7 +132,7 @@
 				4E69912D152601F400E834FE /* CoreData.framework in Frameworks */,
 				4E699105152601C700E834FE /* UIKit.framework in Frameworks */,
 				4E699107152601C700E834FE /* Foundation.framework in Frameworks */,
-				C55E2AC7152DB1DE002D297A /* Parse.framework in Frameworks */,
+				C5B1CB0E1532549F00610E34 /* Parse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,6 +160,8 @@
 		4E6990F5152601C700E834FE = {
 			isa = PBXGroup;
 			children = (
+				C5B1CB0B15324D8200610E34 /* MessageUI.framework */,
+				C5B1CB0915324D6200610E34 /* Parse.framework */,
 				4E69910A152601C700E834FE /* GKCoreDataExperiment */,
 				4E699103152601C700E834FE /* Frameworks */,
 				4E699101152601C700E834FE /* Products */,
@@ -173,6 +179,7 @@
 		4E699103152601C700E834FE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5B1CB0D1532549F00610E34 /* Parse.framework */,
 				C55E2AD5152DB272002D297A /* QuartzCore.framework */,
 				C55E2AD3152DB262002D297A /* Security.framework */,
 				C55E2AD1152DB258002D297A /* libz.1.1.3.dylib */,
@@ -180,7 +187,6 @@
 				C55E2ACD152DB22F002D297A /* SystemConfiguration.framework */,
 				C55E2ACB152DB222002D297A /* CFNetwork.framework */,
 				C55E2AC9152DB212002D297A /* AudioToolbox.framework */,
-				C55E2AC6152DB1DE002D297A /* Parse.framework */,
 				4E6991311526039300E834FE /* AddressBook.framework */,
 				4E6991321526039300E834FE /* AddressBookUI.framework */,
 				4E69912C152601F400E834FE /* CoreData.framework */,
@@ -426,6 +432,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GKCoreDataExperiment/GKCoreDataExperiment-Prefix.pch";
@@ -441,6 +448,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/..\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GKCoreDataExperiment/GKCoreDataExperiment-Prefix.pch";
