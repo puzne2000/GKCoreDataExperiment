@@ -42,7 +42,7 @@
 		C55E2AD4152DB262002D297A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD3152DB262002D297A /* Security.framework */; };
 		C55E2AD6152DB272002D297A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD5152DB272002D297A /* QuartzCore.framework */; };
 		C5B1CB0C15324D8200610E34 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B1CB0B15324D8200610E34 /* MessageUI.framework */; };
-		C5B1CB0E1532549F00610E34 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B1CB0D1532549F00610E34 /* Parse.framework */; };
+		C5B1CB0F1532550400610E34 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B1CB0D1532549F00610E34 /* Parse.framework */; };
 		C5FDC7D31529D134001E77B8 /* delivery.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D11529D134001E77B8 /* delivery.png */; };
 		C5FDC7D41529D134001E77B8 /* trend.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D21529D134001E77B8 /* trend.png */; };
 		C5FDC7D71529D1B5001E77B8 /* man.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D61529D1B5001E77B8 /* man.png */; };
@@ -132,7 +132,7 @@
 				4E69912D152601F400E834FE /* CoreData.framework in Frameworks */,
 				4E699105152601C700E834FE /* UIKit.framework in Frameworks */,
 				4E699107152601C700E834FE /* Foundation.framework in Frameworks */,
-				C5B1CB0E1532549F00610E34 /* Parse.framework in Frameworks */,
+				C5B1CB0F1532550400610E34 /* Parse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
