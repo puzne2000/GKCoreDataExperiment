@@ -196,7 +196,6 @@ gkDone
     } while ((debtReducedBy >0) && (debtReducedBy<originalDebt));
     
     
-    
     //recolor to 0
     initialDriver.color=0;
     

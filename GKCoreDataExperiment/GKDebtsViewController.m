@@ -121,36 +121,8 @@
 
 
 
-#pragma mark - debt and driver suggestions
+#pragma mark - debt 
 
--(void) populateTableViewWithParticipants:(NSArray *) participants{
-    NSRange range;
-    range.location=0;
-    range.length=[self.participants count]-1;
-    
-    
-    self.populated=YES;
-    //NSIndexSet *indexSet=[NSIndexSet indexSetWithIndexesInRange:range];
-    [self.tableView reloadData];
-   // [self.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationRight];
-
-}
-
-
-- (void) populateTableView {
-    
-    //prepareRequest
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Driver"];
-    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
-    // no predicate because we want ALL the drivers
-    
-    //apply fetch
-    NSError *error = nil;
-    self.participants = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
-    if (!self.participants) NSLog(@"error: %@", error.localizedDescription);
-    [self populateTableViewWithParticipants:self.participants];
-
-}
 
 
 -(GKManagedDebt *) currentDebtOf:(GKManagedDriver *) hiker to:(GKManagedDriver *) driver{
@@ -216,9 +188,13 @@
             } else {
                 
                 sum=[self currentDebtOf:driver to:participant].sum;
-                if (!sum) sum=[NSNumber numberWithFloat:0.0];
+                if (!sum){
+                    string=@"---";
+                    color=[UIColor grayColor];
+                } else {
                 string=[NSString stringWithFormat:@"%@ owes me %@ trips", driver.name, sum];
                 color=[UIColor greenColor];
+                }
             }
             [self writeOnCell:indexOfParticipant string:string withColor:color];
             cellOfParticipat.highlighted=NO;
@@ -230,7 +206,49 @@
 
 
 
-#pragma mark - Table view data source
+#pragma mark - Table view changes
+
+-(void) clearTable {
+    self.driver=nil;
+    for (GKManagedDriver *participant in self.participants) {
+        NSIndexPath *indexOfParticipant=[self indexForDriver:participant];
+        UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:indexOfParticipant];
+        cell.highlighted=NO;
+        cell.selected=NO;
+        //UITableViewCell *participantCell= [self.tableView cellForRowAtIndexPath:indexOfParticipant];
+        [self writeOnCell:indexOfParticipant string:@"---" withColor:[UIColor grayColor]];
+    }    
+}
+
+-(void) populateTableViewWithParticipants:(NSArray *) participants{
+    NSRange range;
+    range.location=0;
+    range.length=[self.participants count]-1;
+    
+    
+    self.populated=YES;
+    //NSIndexSet *indexSet=[NSIndexSet indexSetWithIndexesInRange:range];
+    [self.tableView reloadData];
+    // [self.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationRight];
+    
+}
+
+
+- (void) populateTableView {
+    
+    //prepareRequest
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Driver"];
+    request.sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
+    // no predicate because we want ALL the drivers
+    
+    //apply fetch
+    NSError *error = nil;
+    self.participants = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
+    if (!self.participants) NSLog(@"error: %@", error.localizedDescription);
+    [self populateTableViewWithParticipants:self.participants];
+    
+}
+
 
 /*
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -304,17 +322,6 @@
 
 #pragma mark - view lifecycle that I touched
 
--(void) clearTable {
-    self.driver=nil;
-    for (GKManagedDriver *participant in self.participants) {
-        NSIndexPath *indexOfParticipant=[self indexForDriver:participant];
-        UITableViewCell *cell=[self.tableView cellForRowAtIndexPath:indexOfParticipant];
-        cell.highlighted=NO;
-        cell.selected=NO;
-        //UITableViewCell *participantCell= [self.tableView cellForRowAtIndexPath:indexOfParticipant];
-        [self writeOnCell:indexOfParticipant string:@"---" withColor:[UIColor grayColor]];
-    }    
-}
 
 
 

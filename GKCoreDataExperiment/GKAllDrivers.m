@@ -38,6 +38,7 @@
 -(void) createDriverWithName:(NSString *) name{
 // Create and configure a new instance of the Event entity.
 GKManagedDriver *driver = (GKManagedDriver *)[NSEntityDescription insertNewObjectForEntityForName:@"Driver" inManagedObjectContext:self.dbContext];
+    driver.color=0;
     driver.name=name;
     NSError *error = nil;
     if (![self.dbContext save:&error]) {
