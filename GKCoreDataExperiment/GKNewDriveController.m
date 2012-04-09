@@ -120,6 +120,7 @@ gkDone
             NSLog(@"error in fetch request");
         }         
   
+        /* why would i want to remove these elements??
         //!!remove from fetch elements that are not participants
         NSMutableSet *debtsToRemove;
         for (GKManagedDebt *followingDebt in driverDebts) {
@@ -129,9 +130,13 @@ gkDone
         for (GKManagedDebt *followingDebt in debtsToRemove) {
             [driverDebts removeObject:followingDebt];
         }
+         */
         
         //!!if no outgoing debts, there's no cycle. return zero
-        if ([driverDebts count]==0) return toRemove;//which is zero...   
+        if ([driverDebts count]==0) {
+            NSLog(@"no following debts found, returning zero");
+            return [NSNumber numberWithFloat:0];  
+        }
         
         
         //!!find if any of the debts that driver owes complete a cycle
@@ -151,7 +156,7 @@ gkDone
     }
     
     //!!remove amount to remove, and if no debt left, remove debt. 
-    if ([toRemove floatValue]==[debt.sum floatValue]) {
+    if ([toRemove  isEqualToNumber: debt.sum]) {
         [self.dbContext deleteObject:debt];        
     } else if ([toRemove floatValue]>0)  
         debt.sum=[NSNumber numberWithFloat:[debt.sum floatValue]-[toRemove floatValue]];
@@ -178,8 +183,19 @@ gkDone
     GKManagedDriver *initialDriver=debt.owedBy;
      initialDriver.color=[NSNumber numberWithFloat:1.0];
     
-    //remove debt using recursive call
-    [self recursivelyEliminateDebtCycelsByDebt:debt withMaximum:debt.sum];
+    //remove debt using recursive call, reiterate if cycle was found but debt was not eliminated
+    float originalDebt, debtReducedBy;
+    do {
+        originalDebt=[debt.sum floatValue];
+        debtReducedBy=[[self recursivelyEliminateDebtCycelsByDebt:debt withMaximum:debt.sum] floatValue];
+        
+        NSLog(@"original debt of %f reduced by %f", originalDebt, debtReducedBy);
+        
+        NSError *error;
+        if (![self.dbContext save:&error]) NSLog(@"trouble saving to DB!");
+    } while ((debtReducedBy >0) && (debtReducedBy<originalDebt));
+    
+    
     
     //recolor to 0
     initialDriver.color=0;
