@@ -7,6 +7,7 @@
 //
 
 #import "GKManagedDrive+CreateDrive.h"
+#import "GKManagedDriver.h"
 
 @implementation GKManagedDrive (CreateDriver)
 
@@ -29,6 +30,25 @@
     return newDrive;
 
 }
+
+-(NSString *) addNewLineTo:(NSString *) string{
+    return [string stringByAppendingString:@"\n"];
+}
+
+-(NSString *) textReportNoDate{
+    NSString *answer=@"Driver: ";
+    if (self.driver.name)
+        answer=[answer stringByAppendingString:self.driver.name];
+    answer = [self addNewLineTo:answer];
+    answer = [self addNewLineTo:answer];
+    answer=[answer stringByAppendingString:@"Hikers:"];
+    for (GKManagedDriver *hiker in self.hiker) {
+        answer=[answer stringByAppendingFormat:@"\n    %@",hiker.name];
+    }
+    return answer;
+}
+//-(NSString *) textReport;
+
 
 
 @end

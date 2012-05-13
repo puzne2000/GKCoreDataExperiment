@@ -34,6 +34,10 @@
 		C516B6FE1528F192001DA3FD /* GKManagedDebt.m in Sources */ = {isa = PBXBuildFile; fileRef = C516B6FD1528F192001DA3FD /* GKManagedDebt.m */; };
 		C53F703D152806AE00688163 /* GKCarpoolDB.m in Sources */ = {isa = PBXBuildFile; fileRef = C53F703C152806AE00688163 /* GKCarpoolDB.m */; };
 		C53F704415282CAE00688163 /* GKManagedDrive+CreateDrive.m in Sources */ = {isa = PBXBuildFile; fileRef = C53F704315282CAE00688163 /* GKManagedDrive+CreateDrive.m */; };
+		C55B257D155EC62C0009C5D6 /* GKHistoryVCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B257C155EC62C0009C5D6 /* GKHistoryVCViewController.m */; };
+		C55B2580155F22990009C5D6 /* GKDriveCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B257F155F22990009C5D6 /* GKDriveCell.m */; };
+		C55B2582155F24F20009C5D6 /* rewind@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B2581155F24F20009C5D6 /* rewind@2x.png */; };
+		C55B2584155F25810009C5D6 /* rewind.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B2583155F25810009C5D6 /* rewind.png */; };
 		C55E2ACA152DB212002D297A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AC9152DB212002D297A /* AudioToolbox.framework */; };
 		C55E2ACC152DB222002D297A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2ACB152DB222002D297A /* CFNetwork.framework */; };
 		C55E2ACE152DB22F002D297A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2ACD152DB22F002D297A /* SystemConfiguration.framework */; };
@@ -91,6 +95,12 @@
 		C53F703C152806AE00688163 /* GKCarpoolDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKCarpoolDB.m; sourceTree = "<group>"; };
 		C53F704215282CAE00688163 /* GKManagedDrive+CreateDrive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GKManagedDrive+CreateDrive.h"; sourceTree = "<group>"; };
 		C53F704315282CAE00688163 /* GKManagedDrive+CreateDrive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GKManagedDrive+CreateDrive.m"; sourceTree = "<group>"; };
+		C55B257B155EC62C0009C5D6 /* GKHistoryVCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKHistoryVCViewController.h; sourceTree = "<group>"; };
+		C55B257C155EC62C0009C5D6 /* GKHistoryVCViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKHistoryVCViewController.m; sourceTree = "<group>"; };
+		C55B257E155F22990009C5D6 /* GKDriveCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GKDriveCell.h; sourceTree = "<group>"; };
+		C55B257F155F22990009C5D6 /* GKDriveCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GKDriveCell.m; sourceTree = "<group>"; };
+		C55B2581155F24F20009C5D6 /* rewind@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rewind@2x.png"; sourceTree = "<group>"; };
+		C55B2583155F25810009C5D6 /* rewind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rewind.png; sourceTree = "<group>"; };
 		C55E2AC9152DB212002D297A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C55E2ACB152DB222002D297A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C55E2ACD152DB22F002D297A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -100,6 +110,7 @@
 		C55E2AD5152DB272002D297A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C5B1CB0915324D6200610E34 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Parse.framework; sourceTree = "<group>"; };
 		C5B1CB0B15324D8200610E34 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		C5DAA60A1538645E0087A7C3 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
 		C5E13BBD15291FB900997AA6 /* NSObject+GKLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+GKLog.h"; sourceTree = "<group>"; };
 		C5E13BBE15291FB900997AA6 /* NSObject+GKLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+GKLog.m"; sourceTree = "<group>"; };
 		C5E13BBF15291FB900997AA6 /* GKLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GKLogger.h; sourceTree = "<group>"; };
@@ -140,11 +151,11 @@
 			isa = PBXGroup;
 			children = (
 				4E87C20115269604002D27EC /* Model.xcdatamodeld */,
-				C516B6F61528F191001DA3FD /* GKManagedDrive.h */,
 				C516B6FC1528F192001DA3FD /* GKManagedDebt.h */,
 				C516B6FD1528F192001DA3FD /* GKManagedDebt.m */,
 				C516B6F91528F192001DA3FD /* GKManagedDriver.h */,
 				C516B6FA1528F192001DA3FD /* GKManagedDriver.m */,
+				C516B6F61528F191001DA3FD /* GKManagedDrive.h */,
 				C516B6F71528F192001DA3FD /* GKManagedDrive.m */,
 				C53F704215282CAE00688163 /* GKManagedDrive+CreateDrive.h */,
 				C53F704315282CAE00688163 /* GKManagedDrive+CreateDrive.m */,
@@ -197,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				4E699116152601C700E834FE /* MainStoryboard.storyboard */,
+				C55B2576155C2F100009C5D6 /* model classes */,
 				C5FDC7DB1529D50E001E77B8 /* main view controllers */,
 				C5FDC7DC1529D53B001E77B8 /* small view controllers */,
 				4E65518F15260B0900C64AD5 /* core data based model */,
@@ -209,6 +221,8 @@
 		4E69910B152601C700E834FE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C55B2583155F25810009C5D6 /* rewind.png */,
+				C55B2581155F24F20009C5D6 /* rewind@2x.png */,
 				C5FDC7D61529D1B5001E77B8 /* man.png */,
 				C5FDC7D11529D134001E77B8 /* delivery.png */,
 				C5FDC7D21529D134001E77B8 /* trend.png */,
@@ -227,6 +241,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C55B2576155C2F100009C5D6 /* model classes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "model classes";
+			sourceTree = "<group>";
+		};
 		C5E13BBB15291F9D00997AA6 /* logger */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,6 +264,8 @@
 			children = (
 				4E65519815260FF100C64AD5 /* GKAllDrivers.h */,
 				4E65519915260FF100C64AD5 /* GKAllDrivers.m */,
+				C55B257B155EC62C0009C5D6 /* GKHistoryVCViewController.h */,
+				C55B257C155EC62C0009C5D6 /* GKHistoryVCViewController.m */,
 				4E7023631527360B001CAC8E /* GKNewDriveController.h */,
 				4E7023641527360B001CAC8E /* GKNewDriveController.m */,
 				C5FDC7D81529D4D6001E77B8 /* GKDebtsViewController.h */,
@@ -256,6 +279,8 @@
 		C5FDC7DC1529D53B001E77B8 /* small view controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C55B257E155F22990009C5D6 /* GKDriveCell.h */,
+				C55B257F155F22990009C5D6 /* GKDriveCell.m */,
 				4E70236A15274314001CAC8E /* GKDateChooser.h */,
 				4E70236E15274482001CAC8E /* GKDateChooser.m */,
 				4E87C1ED15267C8D002D27EC /* GKSetDriverName.h */,
@@ -327,6 +352,8 @@
 				C5FDC7D31529D134001E77B8 /* delivery.png in Resources */,
 				C5FDC7D41529D134001E77B8 /* trend.png in Resources */,
 				C5FDC7D71529D1B5001E77B8 /* man.png in Resources */,
+				C55B2582155F24F20009C5D6 /* rewind@2x.png in Resources */,
+				C55B2584155F25810009C5D6 /* rewind.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +379,8 @@
 				C516B6FB1528F192001DA3FD /* GKManagedDriver.m in Sources */,
 				C516B6FE1528F192001DA3FD /* GKManagedDebt.m in Sources */,
 				C5FDC7DA1529D4D6001E77B8 /* GKDebtsViewController.m in Sources */,
+				C55B257D155EC62C0009C5D6 /* GKHistoryVCViewController.m in Sources */,
+				C55B2580155F22990009C5D6 /* GKDriveCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +510,7 @@
 		4E87C20115269604002D27EC /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C5DAA60A1538645E0087A7C3 /* Model 2.xcdatamodel */,
 				4E87C20215269604002D27EC /* Model.xcdatamodel */,
 			);
 			currentVersion = 4E87C20215269604002D27EC /* Model.xcdatamodel */;

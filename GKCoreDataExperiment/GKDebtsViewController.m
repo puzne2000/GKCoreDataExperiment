@@ -143,7 +143,7 @@
     
     //if ([debtsOwed count]>1) NSLog(@"error - multiple parallel debts");
  
-    if (![debtsOwed lastObject]) NSLog(@"returning nil for currentDebt");
+   // if (![debtsOwed lastObject]) NSLog(@"returning nil for currentDebt");
     return [debtsOwed lastObject];//might be nil i think
     
 }

@@ -48,6 +48,7 @@ static GKLogger *sharedLogger;
     /////////////////////////////////////////////////////////
     //update who I want to listen to
     ///////////////////////////////////////////////////////////
+    
     //[_logFrom addObject:NSStringFromClass([GKDataViewController class])];
     [_logFrom addObject:NSStringFromClass([GKRootViewController class])];
     //[_logFrom addObject:NSStringFromClass([GKWritePad class])];

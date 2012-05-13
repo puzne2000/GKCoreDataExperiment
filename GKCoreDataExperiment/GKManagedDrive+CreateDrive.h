@@ -15,4 +15,9 @@
 
 +(GKManagedDrive *) newDriveWithDriver:(GKManagedDriver *) driver hikers:(NSSet *)participants date:(NSDate *)date occured:(BOOL) didOccur inContext:(NSManagedObjectContext *) context;
 
+-(NSString *) textReportNoDate;
+//-(NSString *) textReport;
+
+
+
 @end

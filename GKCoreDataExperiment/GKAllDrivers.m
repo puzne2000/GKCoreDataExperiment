@@ -83,6 +83,9 @@ GKManagedDriver *driver = (GKManagedDriver *)[NSEntityDescription insertNewObjec
 
 
 
+
+
+#pragma mark - View lifecycle
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -95,24 +98,22 @@ GKManagedDriver *driver = (GKManagedDriver *)[NSEntityDescription insertNewObjec
     
     self.dbContext=[GKCarpoolDB sharedContext];
     if ([GKCarpoolDB globalDBIsReady]) 
-        [self setupFetchedResultsController];
+        [self databaseReady:nil];
     
- /*   
-    NSLog(@"trying the parse thing");
-    PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
-    [testObject setObject:@"bar" forKey:@"foo"];
-    [testObject save];
-*/
+    /*   
+     NSLog(@"trying the parse thing");
+     PFObject *testObject = [PFObject objectWithClassName:@"TestObject"];
+     [testObject setObject:@"bar" forKey:@"foo"];
+     [testObject save];
+     */
 }
-    
+
 - (void)  databaseReady:(NSNotification *) notification {
     NSLog(@"got message that db is ready");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self setupFetchedResultsController];
 }
 
-
-
-#pragma mark - View lifecycle
 
 - (id)initWithStyle:(UITableViewStyle)style
 {

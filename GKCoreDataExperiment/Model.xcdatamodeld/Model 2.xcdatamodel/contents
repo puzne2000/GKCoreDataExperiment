@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50d" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Debt" representedClassName="GKManagedDebt" syncable="YES">
+        <attribute name="sum" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="owedBy" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Driver" inverseName="shouldPay" inverseEntity="Driver" syncable="YES"/>
+        <relationship name="owedTo" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Driver" inverseName="isOwed" inverseEntity="Driver" syncable="YES"/>
+    </entity>
+    <entity name="Drive" representedClassName="GKManagedDrive" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="length" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="occured" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="driver" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Driver" inverseName="drove" inverseEntity="Driver" syncable="YES"/>
+        <relationship name="hiker" optional="YES" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Driver" inverseName="hiked" inverseEntity="Driver" syncable="YES"/>
+    </entity>
+    <entity name="Driver" representedClassName="GKManagedDriver" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="visited" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="drove" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Drive" inverseName="driver" inverseEntity="Drive" syncable="YES"/>
+        <relationship name="hiked" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Drive" inverseName="hiker" inverseEntity="Drive" syncable="YES"/>
+        <relationship name="isOwed" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Debt" inverseName="owedTo" inverseEntity="Debt" syncable="YES"/>
+        <relationship name="shouldPay" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Debt" inverseName="owedBy" inverseEntity="Debt" syncable="YES"/>
+    </entity>
+    <fetchRequest name="FetchRequest" entity="Drive" predicateString="date &lt;= CAST(355361615.478379, &quot;NSDate&quot;)"/>
+    <elements>
+        <element name="Debt" positionX="-29" positionY="504" width="128" height="90"/>
+        <element name="Drive" positionX="-171" positionY="201" width="128" height="120"/>
+        <element name="Driver" positionX="160" positionY="192" width="128" height="150"/>
+    </elements>
+</model>

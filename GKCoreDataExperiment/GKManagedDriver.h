@@ -44,4 +44,8 @@
 - (void)addShouldPay:(NSSet *)values;
 - (void)removeShouldPay:(NSSet *)values;
 
+-(GKManagedDebt *) currentDebtTo:(GKManagedDriver *) driver;
+
+-(void) addDebtTo:(GKManagedDriver *)driver onAmount:(NSNumber *) sum;
+
 @end
