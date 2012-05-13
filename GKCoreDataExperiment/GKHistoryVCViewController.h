@@ -11,5 +11,6 @@
 @interface GKHistoryVCViewController : CoreDataTableViewController
 
 @property (strong, nonatomic) NSManagedObjectContext *dbContext;
+- (IBAction)emailButtonPressed:(id)sender;
 
 @end

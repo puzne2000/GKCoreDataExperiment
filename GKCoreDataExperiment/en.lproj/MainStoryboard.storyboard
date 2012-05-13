@@ -214,7 +214,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1971" y="382"/>
+            <point key="canvasLocation" x="2028" y="392"/>
         </scene>
         <!--HistoryVC View Controller - History-->
         <scene sceneID="QuT-Gp-XPW">
@@ -262,7 +262,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                         <barButtonItem key="leftBarButtonItem" title="email" id="O1J-cy-wOJ">
                             <color key="tintColor" red="0.73893811190000003" green="0.69508422140000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="emailButton:" destination="n9h-en-Sgs" id="ZSx-8V-mvs"/>
+                                <action selector="emailButtonPressed:" destination="Phj-Gn-WhH" id="MKg-cO-etB"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -453,7 +453,7 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
                     </connections>
                 </tableViewController>
             </objects>
-            <point key="canvasLocation" x="1052" y="360"/>
+            <point key="canvasLocation" x="1618" y="392"/>
         </scene>
         <!--Navigation Controller - Debts report-->
         <scene sceneID="M5v-VR-htQ">
@@ -500,54 +500,6 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
         <image name="rewind.png" width="26" height="26"/>
         <image name="trend.png" width="52" height="52"/>
     </resources>
-    <classes>
-        <class className="CoreDataTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CoreDataTableViewController.h"/>
-        </class>
-        <class className="GKAllDrivers" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKAllDrivers.h"/>
-            <relationships>
-                <relationship kind="action" name="addDriverItem:" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="GKDateChooser" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKDateChooser.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="datePicker" candidateClass="UIDatePicker"/>
-            </relationships>
-        </class>
-        <class className="GKDebtsViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKDebtsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="emailButton:" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="GKDriveCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKDriveCell.h"/>
-        </class>
-        <class className="GKDriverCell" superclassName="UITableViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKDriverCell.h"/>
-        </class>
-        <class className="GKHistoryVCViewController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKHistoryVCViewController.h"/>
-        </class>
-        <class className="GKNewDriveController" superclassName="CoreDataTableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKNewDriveController.h"/>
-            <relationships>
-                <relationship kind="action" name="participantsDriverButtonPressed:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="dateLabelButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="driveInfoLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="GKSetDriverName" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GKSetDriverName.h"/>
-            <relationships>
-                <relationship kind="action" name="done:"/>
-                <relationship kind="outlet" name="nameField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

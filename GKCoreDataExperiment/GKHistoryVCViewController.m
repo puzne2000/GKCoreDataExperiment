@@ -11,6 +11,8 @@
 #import "GKManagedDrive.h"
 #import "GKManagedDriver.h"
 #import "GKDriveCell.h"
+#import <MessageUI/MessageUI.h>
+
 
 @interface GKHistoryVCViewController ()
 
@@ -33,6 +35,107 @@
                                                                                    cacheName:nil];
 }
 
+#pragma mark - email button
+
+- (NSString *) driveReport{
+    
+    static NSDateFormatter *_dateFormatter;
+    if (!_dateFormatter) {
+        _dateFormatter=[[NSDateFormatter alloc] init];
+        [_dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [_dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    }
+    
+    NSString *report=[NSString string];
+    
+    NSArray *selectedCellPaths=self.tableView.indexPathsForSelectedRows;
+    for (NSIndexPath *indexPath in selectedCellPaths) {
+        GKManagedDrive *drive= [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+        report=[report stringByAppendingString:[_dateFormatter stringFromDate:drive.date]];
+        
+        report=[report stringByAppendingFormat:@"\n\nDriver: "];
+        if (drive.driver) report=[report stringByAppendingString:drive.driver.name];
+        
+        report=[report stringByAppendingFormat:@"\n\n Hikers: \n"];
+        for (GKManagedDriver *hiker in drive.hiker) {
+            report=[report stringByAppendingFormat:@"    %@\n",hiker.name];
+        }
+        report=[report stringByAppendingFormat:@"\n\n"];
+    }
+    return report;
+}
+
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail cancelled: you cancelled the operation and no email message was queued.");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved: you saved the email message in the drafts folder.");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail send: the email message is queued in the outbox. It is ready to send.");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail failed: the email message was not saved or queued, possibly due to an error.");
+            break;
+        default:
+            NSLog(@"Mail not sent.");
+            break;
+    }
+    
+    // Remove the mail view
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+
+- (IBAction)emailButtonPressed:(UIBarButtonItem *)sender {
+    {
+        if ([MFMailComposeViewController canSendMail])
+        {
+            MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+            
+            mailer.mailComposeDelegate = (id) self;
+            
+            [mailer setSubject:@"A carpool history report, braught to you by Kindler Insdustries"];
+            
+            /*
+             NSArray *toRecipients = [NSArray arrayWithObjects:@"fisrtMail@example.com", @"secondMail@example.com", nil];
+             [mailer setToRecipients:toRecipients];
+             
+             
+             UIImage *myImage = [UIImage imageNamed:@"mobiletuts-logo.png"];
+             NSData *imageData = UIImagePNGRepresentation(myImage);
+             [mailer addAttachmentData:imageData mimeType:@"image/png" fileName:@"mobiletutsImage"]; 
+             */
+            
+            NSString *emailBody = [self driveReport];
+            [mailer setMessageBody:emailBody isHTML:NO];
+            
+            [self presentModalViewController:mailer animated:YES];
+            
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failure"
+                                                            message:@"Your device doesn't support the composer sheet"
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            alert=nil;
+        }
+        
+    }
+}
+
+
+
+
 #pragma mark - Table view data source
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -40,6 +143,8 @@
     return (52.0+(1+[current_drive.hiker count])*22.0);
 }
 
+                
+                
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Drive Cell";
@@ -163,6 +268,5 @@
     }
     return self;
 }
-
 
 @end
