@@ -16,12 +16,19 @@
 
 @interface GKHistoryVCViewController ()
 
+//@property (strong, nonatomic) NSMutableIndexSet *selectedRows;
+
 @end
 
 @implementation GKHistoryVCViewController
 
-@synthesize dbContext=_dbContext;
-
+@synthesize dbContext=_dbContext;//, selectedRows=_selectedRows;
+/*
+ - (NSMutableIndexSet *) selectedRows {
+    if (!_selectedRows) _selectedRows=[NSMutableIndexSet indexSet];
+    return _selectedRows;
+}
+*/
 
 - (void)setupFetchedResultsController // attaches an NSFetchRequest to this UITableViewController
 {
@@ -135,26 +142,30 @@
 
 
 #pragma mark - select cells for report
+-(void) toggleSelectionSetForIndexPath:(NSIndexPath *)indexPath{
+    
+    //##this is a bit strange since i use containsObject but what if there is a different indexPath object with the same value??
+    if ([self.tableView.indexPathsForSelectedRows containsObject:indexPath])
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+    else
+        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+}
+
+-(void) xorSelectedRowsForIndexPath:(NSIndexPath *) indexPath{
+    for (int i=0;i<indexPath.row;i++) {
+        NSIndexPath *newIndex=[NSIndexPath indexPathForRow:i inSection:indexPath.section];
+        [self toggleSelectionSetForIndexPath:newIndex];
+    }    
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    //[super tableView:tableView didSelectRowAtIndexPath:indexPath];
-    for (int i=0;i<indexPath.row;i++) {
-
-        NSIndexPath *newIndex=[NSIndexPath indexPathForRow:i inSection:indexPath.section];
-        if ([self.tableView cellForRowAtIndexPath:newIndex].isSelected)
-            [self.tableView deselectRowAtIndexPath:newIndex animated:NO];
-        else
-            [self.tableView selectRowAtIndexPath:newIndex animated:NO scrollPosition:UITableViewScrollPositionNone];
-
-    }
-   //NSLog(@"index path: %@", indexPath);
-//    NSLog(@"row:%d", indexPath.row);
+    [self  xorSelectedRowsForIndexPath:indexPath];//toggle all cells (or indexpaths if no cells exit) before it    
 }
 
 
 -(void) tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [self tableView:tableView didSelectRowAtIndexPath:indexPath];//deal with other cells in the same manner as when indexPath selected
+    [self tableView:tableView didSelectRowAtIndexPath:indexPath];
+    //since I use 'toggle', there should be no difference between select and deselect
 }
 
 #pragma mark - Table view data source
@@ -266,6 +277,7 @@
 {
     [super viewWillDisappear:animated];
     //self.navigationController.toolbarHidden=YES;
+    self.fetchedResultsController=nil;//##i will get it back when I reappear - right?
     
 }
 
