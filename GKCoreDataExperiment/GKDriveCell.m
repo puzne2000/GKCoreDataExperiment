@@ -37,7 +37,6 @@
     self.detailTextLabel.text=[self.dateFormatter stringFromDate: drive.date];
     //self.textLabel.text=drive.driver.name;
     self.textLabel.text=drive.textReportNoDate;
-    NSLog(@"setDrive called");
 }
 
 

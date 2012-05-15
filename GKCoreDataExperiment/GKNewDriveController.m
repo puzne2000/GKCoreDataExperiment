@@ -436,8 +436,6 @@ gkDone
                                                                         managedObjectContext:self.dbContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
-    NSLog(@"results controller %@", self.fetchedResultsController);
-    NSLog(@"context class: %@", [self.dbContext class]);
 }
 
 

@@ -35,7 +35,7 @@
                                                                                    cacheName:nil];
 }
 
-#pragma mark - email button
+#pragma mark - email reporting
 
 - (NSString *) driveReport{
     
@@ -134,9 +134,31 @@
 }
 
 
+#pragma mark - select cells for report
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //[super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    for (int i=0;i<indexPath.row;i++) {
+
+        NSIndexPath *newIndex=[NSIndexPath indexPathForRow:i inSection:indexPath.section];
+        if ([self.tableView cellForRowAtIndexPath:newIndex].isSelected)
+            [self.tableView deselectRowAtIndexPath:newIndex animated:NO];
+        else
+            [self.tableView selectRowAtIndexPath:newIndex animated:NO scrollPosition:UITableViewScrollPositionNone];
+
+    }
+   //NSLog(@"index path: %@", indexPath);
+//    NSLog(@"row:%d", indexPath.row);
+}
+
+
+-(void) tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self tableView:tableView didSelectRowAtIndexPath:indexPath];//deal with other cells in the same manner as when indexPath selected
+}
 
 #pragma mark - Table view data source
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     GKManagedDrive *current_drive = [self.fetchedResultsController objectAtIndexPath:indexPath];

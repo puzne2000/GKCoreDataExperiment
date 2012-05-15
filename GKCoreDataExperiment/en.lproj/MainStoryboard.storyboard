@@ -474,12 +474,12 @@ AQABAAEAAQAB//+dkAEA//+PgAAE//+dkAEI//+dkAEMUERUAFBTVABQV1QAUFBUAAAAAAEAAAABA
             </objects>
             <point key="canvasLocation" x="1590" y="967"/>
         </scene>
-        <!--Navigation Controller - Item-->
+        <!--Navigation Controller - History-->
         <scene sceneID="EiD-JZ-i8l">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FAV-gv-KbI" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController id="ckc-nc-AbD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" image="rewind.png" id="fHu-w9-UIg"/>
+                    <tabBarItem key="tabBarItem" title="History" image="rewind.png" id="fHu-w9-UIg"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Rcm-zp-nZo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
