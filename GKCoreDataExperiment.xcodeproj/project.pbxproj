@@ -45,6 +45,9 @@
 		C55E2AD2152DB258002D297A /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD1152DB258002D297A /* libz.1.1.3.dylib */; };
 		C55E2AD4152DB262002D297A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD3152DB262002D297A /* Security.framework */; };
 		C55E2AD6152DB272002D297A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55E2AD5152DB272002D297A /* QuartzCore.framework */; };
+		C59A9ADD156555760062E670 /* trend@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C59A9ADC156555760062E670 /* trend@2x.png */; };
+		C59A9AE01565558B0062E670 /* man@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C59A9ADF1565558B0062E670 /* man@2x.png */; };
+		C59A9AE21565559D0062E670 /* delivery@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C59A9AE11565559D0062E670 /* delivery@2x.png */; };
 		C5B1CB0C15324D8200610E34 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B1CB0B15324D8200610E34 /* MessageUI.framework */; };
 		C5FDC7D31529D134001E77B8 /* delivery.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D11529D134001E77B8 /* delivery.png */; };
 		C5FDC7D41529D134001E77B8 /* trend.png in Resources */ = {isa = PBXBuildFile; fileRef = C5FDC7D21529D134001E77B8 /* trend.png */; };
@@ -108,6 +111,9 @@
 		C55E2AD1152DB258002D297A /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
 		C55E2AD3152DB262002D297A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C55E2AD5152DB272002D297A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C59A9ADC156555760062E670 /* trend@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trend@2x.png"; sourceTree = "<group>"; };
+		C59A9ADF1565558B0062E670 /* man@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "man@2x.png"; sourceTree = "<group>"; };
+		C59A9AE11565559D0062E670 /* delivery@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delivery@2x.png"; sourceTree = "<group>"; };
 		C5B1CB0915324D6200610E34 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = ../Parse.framework; sourceTree = "<group>"; };
 		C5B1CB0B15324D8200610E34 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		C5DAA60A1538645E0087A7C3 /* Model 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Model 2.xcdatamodel"; sourceTree = "<group>"; };
@@ -221,22 +227,25 @@
 		4E69910B152601C700E834FE /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				C55B2583155F25810009C5D6 /* rewind.png */,
-				C55B2581155F24F20009C5D6 /* rewind@2x.png */,
-				C5FDC7D61529D1B5001E77B8 /* man.png */,
 				C5FDC7D11529D134001E77B8 /* delivery.png */,
-				C5FDC7D21529D134001E77B8 /* trend.png */,
-				4E699125152601C700E834FE /* second@2x.png */,
-				4E699123152601C700E834FE /* second.png */,
+				C59A9AE11565559D0062E670 /* delivery@2x.png */,
 				4E69911C152601C700E834FE /* first.png */,
 				4E69911E152601C700E834FE /* first@2x.png */,
 				4E699113152601C700E834FE /* GKAppDelegate.h */,
 				4E699114152601C700E834FE /* GKAppDelegate.m */,
-				4E65519615260EAC00C64AD5 /* Q1.PNG */,
 				4E69910C152601C700E834FE /* GKCoreDataExperiment-Info.plist */,
+				4E699112152601C700E834FE /* GKCoreDataExperiment-Prefix.pch */,
 				4E69910D152601C700E834FE /* InfoPlist.strings */,
 				4E699110152601C700E834FE /* main.m */,
-				4E699112152601C700E834FE /* GKCoreDataExperiment-Prefix.pch */,
+				C5FDC7D61529D1B5001E77B8 /* man.png */,
+				C59A9ADF1565558B0062E670 /* man@2x.png */,
+				4E65519615260EAC00C64AD5 /* Q1.PNG */,
+				C55B2583155F25810009C5D6 /* rewind.png */,
+				C55B2581155F24F20009C5D6 /* rewind@2x.png */,
+				4E699123152601C700E834FE /* second.png */,
+				4E699125152601C700E834FE /* second@2x.png */,
+				C5FDC7D21529D134001E77B8 /* trend.png */,
+				C59A9ADC156555760062E670 /* trend@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -354,6 +363,9 @@
 				C5FDC7D71529D1B5001E77B8 /* man.png in Resources */,
 				C55B2582155F24F20009C5D6 /* rewind@2x.png in Resources */,
 				C55B2584155F25810009C5D6 /* rewind.png in Resources */,
+				C59A9ADD156555760062E670 /* trend@2x.png in Resources */,
+				C59A9AE01565558B0062E670 /* man@2x.png in Resources */,
+				C59A9AE21565559D0062E670 /* delivery@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

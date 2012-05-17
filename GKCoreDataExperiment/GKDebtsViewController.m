@@ -45,7 +45,7 @@
         for (GKManagedDriver *driver in self.participants) {
             
             NSNumber *debt=[self currentDebtOf:hiker to:driver].sum;
-            if (debt) report=[report stringByAppendingFormat:@"%@ owes %@ trips to %@ \n",hiker.name, debt, driver.name];
+            if (debt) report=[report stringByAppendingFormat:@"%@ owes %@ drives to %@ \n",hiker.name, debt, driver.name];
             
         }
     }
@@ -182,7 +182,7 @@
             NSString *string;
             UIColor *color;
             if (sum) {
-                string=[NSString stringWithFormat:@"I owe %@  %@ trips", driver.name,sum];
+                string=[NSString stringWithFormat:@"I owe %@  %@ drivess", driver.name,sum];
                 color=[UIColor orangeColor];
                 
             } else {
@@ -192,7 +192,7 @@
                     string=@"---";
                     color=[UIColor grayColor];
                 } else {
-                string=[NSString stringWithFormat:@"%@ owes me %@ trips", driver.name, sum];
+                string=[NSString stringWithFormat:@"%@ owes me %@ drives", driver.name, sum];
                 color=[UIColor greenColor];
                 }
             }
