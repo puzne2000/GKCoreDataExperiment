@@ -228,6 +228,8 @@ gkDone
                     //participantCell.detailTextLabel.textColor=[UIColor magentaColor];
                     participantCell.detailTextLabel.text=[NSString stringWithFormat:
                                                           @"I owe %@  %@ drives",designatedDriver.name, sum];     
+                } else {
+                    participantCell.detailTextLabel.text=@"---";
                 }
             }
             
