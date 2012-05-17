@@ -15,7 +15,10 @@
 #import "GKManagedDriver.h"
 #import "GKManagedDebt.h"
 
+
+
 @interface GKNewDriveController()
+
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSDate *dateForDrive;
@@ -23,7 +26,6 @@
 @property (strong, nonatomic) GKManagedDriver *driver;
 @property(strong, nonatomic) GKManagedDrive *lastDriveCreated;
 @property (strong, nonatomic) UIBarButtonItem *cancelButton;
-
 
 - (void)setupFetchedResultsController;
 
@@ -34,7 +36,9 @@ gkDone
 };
 @property (nonatomic) enum mystates myState;
 
+
 @end
+
 
 
 
@@ -100,56 +104,53 @@ gkDone
     }
 }
 
+#pragma mark - fetch requests
+
+- (NSMutableArray *) debtsOwedBy:(GKManagedDriver *)driver{
+    //prepare request
+    static NSFetchRequest *request;
+    if (!request) request= [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
+    request.predicate=[NSPredicate predicateWithFormat:@"owedTo=%@",driver];
+    request.sortDescriptors = NULL;//[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
+    
+    //apply fetch
+    NSError *error = nil;
+    NSMutableArray *debtsOwed = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
+    if (debtsOwed == nil) {
+        // Handle the error.
+        NSLog(@"error in debtsOwedBy fetch request");
+    }
+
+    return debtsOwed;
+}
 
 #pragma mark - debt and driver suggestions
 
 
--(void) recomputeDebtWithDrive:(GKManagedDrive *)drive{
-    NSSet *hikers=drive.hiker;//##rename this hiker thing?
-    //NSLog(@"%d hikers to update", [hikers count]);
-    for (GKManagedDriver *hiker in hikers) {
-        
-        if (!(hiker==drive.driver)) {//no loops!
-            //NSLog(@"adding debt by %@ to %@", hiker.name, drive.driver.name);
-        [hiker addDebtTo:drive.driver onAmount:drive.length];
-       } else NSLog(@"oops, tried to add debt by the driver..");
-    }
-}
-
-
 -(GKManagedDriver *)computeSuggestedDriver {
     GKManagedDriver *selectedDriver;
+    //NSMutableSet *possibleDrivers;
+    //int maxOwed;
     for (GKManagedDriver *driver in self.participants) {
         //prepare color for later
         driver.color=0;//##don't think this is needed
         
         //see if driver is owed by anyone
 
-        //prepare request
-        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
-        request.predicate=[NSPredicate predicateWithFormat:@"owedTo=%@",driver];
-        request.sortDescriptors = NULL;//[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
-        
-        //apply fetch
-        NSError *error = nil;
-        NSMutableArray *debtsOwed = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
-        if (debtsOwed == nil) {
-            // Handle the error.
-            NSLog(@"error in fetch request");
-        }
-        
+        NSMutableArray *debtsOwed =[self debtsOwedBy:driver];
         //is our driver not owed by anyone in participants?
         int count=0;
         for (GKManagedDebt *debt in debtsOwed) {
             if ([self.participants containsObject:debt.owedBy]) count++; 
         }
+        NSLog(@"%@ is owed by %d people", driver.name, count );
         if (count==0) {
             selectedDriver=driver;
             break;
         }
     }
     if (selectedDriver) return selectedDriver; else {
-        NSLog(@"seems there is a debt cycle, please remove cycles!");
+        if ([self.participants count]>0) NSLog(@"seems there is a debt cycle, please remove cycles!");
         return [self.participants anyObject];
     }
 }
@@ -249,8 +250,7 @@ gkDone
         
         
         //updates debts with new drive
-        
-        [self recomputeDebtWithDrive:self.lastDriveCreated];
+        [self.lastDriveCreated addAssociatedDebtsToRecord];
         
         //set internal state
         self.myState=gkDone;

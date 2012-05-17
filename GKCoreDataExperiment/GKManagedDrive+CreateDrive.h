@@ -18,6 +18,9 @@
 -(NSString *) textReportNoDate;
 //-(NSString *) textReport;
 
+-(void) addAssociatedDebtsToRecord;
+
+-(void) removeAssociatedDebtsFromRecord;//should be called for cancelling or before removing a drive
 
 
 @end

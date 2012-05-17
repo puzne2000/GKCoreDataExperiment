@@ -49,6 +49,30 @@
 }
 //-(NSString *) textReport;
 
+-(void) removeAssociatedDebtsFromRecord{//should be called for cancelling or before removing a drive
+    NSSet *hikers=self.hiker;//##rename this hiker thing?
+    //NSLog(@"%d hikers to update", [hikers count]);
+    for (GKManagedDriver *hiker in hikers) {
+        
+        if (!(hiker==self.driver)) {//no loops!
+            //NSLog(@"adding debt by %@ to %@", hiker.name, drive.driver.name);
+            [self.driver addDebtTo:hiker onAmount:self.length];
+        } else NSLog(@"oops, tried to add debt by the driver..");
+    }    
+}
+
+
+-(void) addAssociatedDebtsToRecord{
+    NSSet *hikers=self.hiker;//##rename this hiker thing?
+    //NSLog(@"%d hikers to update", [hikers count]);
+    for (GKManagedDriver *hiker in hikers) {
+        
+        if (!(hiker==self.driver)) {//no loops!
+            //NSLog(@"adding debt by %@ to %@", hiker.name, drive.driver.name);
+            [hiker addDebtTo:self.driver onAmount:self.length];
+        } else NSLog(@"oops, tried to add debt by the driver..");
+    }
+}
 
 
 @end

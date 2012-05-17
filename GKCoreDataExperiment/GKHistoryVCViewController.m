@@ -8,7 +8,7 @@
 
 #import "GKHistoryVCViewController.h"
 #import "GKCarpoolDB.h"
-#import "GKManagedDrive.h"
+#import "GKManagedDrive+CreateDrive.h"
 #import "GKManagedDriver.h"
 #import "GKDriveCell.h"
 #import <MessageUI/MessageUI.h>
@@ -16,19 +16,13 @@
 
 @interface GKHistoryVCViewController ()
 
-//@property (strong, nonatomic) NSMutableIndexSet *selectedRows;
+@property (strong, nonatomic) GKManagedDrive *driveToDelete;
 
 @end
 
 @implementation GKHistoryVCViewController
 
-@synthesize dbContext=_dbContext;//, selectedRows=_selectedRows;
-/*
- - (NSMutableIndexSet *) selectedRows {
-    if (!_selectedRows) _selectedRows=[NSMutableIndexSet indexSet];
-    return _selectedRows;
-}
-*/
+@synthesize dbContext=_dbContext, driveToDelete=_driveToDelete;
 
 - (void)setupFetchedResultsController // attaches an NSFetchRequest to this UITableViewController
 {
@@ -193,6 +187,69 @@
     //cell.textLabel.text =current_drive.driver.name;
     return cell;
 }
+
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"button no %d clicked", buttonIndex);
+    switch (buttonIndex) {
+        case 1:
+        {
+            NSLog(@"1");
+            NSLog(@"deleting: %@",self.driveToDelete);
+            
+            [self.driveToDelete removeAssociatedDebtsFromRecord];
+            
+            [self.dbContext deleteObject:self.driveToDelete];
+            
+            
+            // Commit the change.
+            NSError *error = nil;
+            if (![self.dbContext save:&error]) {
+                // Handle the error.
+                NSLog(@"error saving database after delete");
+            }
+        }
+    case 0:
+            self.driveToDelete=nil;
+        NSLog(@"0");
+        break;
+
+    default:
+            NSLog(@"?????");
+        break;
+    }
+}
+
+
+
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        
+        UIAlertView *alert= [[UIAlertView alloc] initWithTitle:@"Delete Drive" message:@"Are you sure you want to delete this drive and cancel the associated driving debts?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: @"Confirm",nil];
+        [alert show];
+        
+       // NSLog(@"finished with alert stuff - is it still on??"); yes it's still on...
+        
+        self.driveToDelete = [self.fetchedResultsController objectAtIndexPath:indexPath];
+        
+    }   
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        {
+            NSLog(@"method  not implemented!");
+        }        
+    }   
+}
+
+
+
+
+
+
 
 
 #pragma mark - View lifecycle
