@@ -105,23 +105,37 @@ gkDone
 }
 
 #pragma mark - fetch requests
+-(NSArray *)resultForRequest:(NSFetchRequest *)request{
+    NSError *error = nil;
+    NSArray *result = [self.dbContext executeFetchRequest:request error:&error];
+    if (result == nil) {
+        // Handle the error.
+        NSLog(@"error in fetch request");
+    }
+    return result;
+}
 
-- (NSMutableArray *) debtsOwedBy:(GKManagedDriver *)driver{
+
+- (NSArray *) debtsOwedTo:(GKManagedDriver *)driver{
     //prepare request
     static NSFetchRequest *request;
     if (!request) request= [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
     request.predicate=[NSPredicate predicateWithFormat:@"owedTo=%@",driver];
-    request.sortDescriptors = NULL;//[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)]];
+    request.sortDescriptors = NULL;
     
     //apply fetch
-    NSError *error = nil;
-    NSMutableArray *debtsOwed = [[self.dbContext executeFetchRequest:request error:&error] mutableCopy];
-    if (debtsOwed == nil) {
-        // Handle the error.
-        NSLog(@"error in debtsOwedBy fetch request");
-    }
+    return [self resultForRequest:request];
+}
 
-    return debtsOwed;
+- (NSArray *) debtsOwedBy:(GKManagedDriver *)driver{
+    //prepare request
+    static NSFetchRequest *request;
+    if (!request) request= [NSFetchRequest fetchRequestWithEntityName:@"Debt"];
+    request.predicate=[NSPredicate predicateWithFormat:@"owedBy=%@",driver];
+    request.sortDescriptors = NULL;
+    
+    //apply fetch
+    return [self resultForRequest:request];
 }
 
 #pragma mark - debt and driver suggestions
@@ -129,25 +143,38 @@ gkDone
 
 -(GKManagedDriver *)computeSuggestedDriver {
     GKManagedDriver *selectedDriver;
-    //NSMutableSet *possibleDrivers;
-    //int maxOwed;
+    NSMutableSet *possibleDrivers=[NSMutableSet set];
+    int maxOwed=0;//=0
+    
+    
+    //find drivers owed by noone
     for (GKManagedDriver *driver in self.participants) {
         //prepare color for later
         driver.color=0;//##don't think this is needed
         
         //see if driver is owed by anyone
 
-        NSMutableArray *debtsOwed =[self debtsOwedBy:driver];
+        NSArray *debtsOwed =[self debtsOwedTo:driver];
         //is our driver not owed by anyone in participants?
         int count=0;
         for (GKManagedDebt *debt in debtsOwed) {
             if ([self.participants containsObject:debt.owedBy]) count++; 
         }
-        NSLog(@"%@ is owed by %d people", driver.name, count );
         if (count==0) {
-            selectedDriver=driver;
-            break;
+            [possibleDrivers addObject:driver];
         }
+    }
+    
+    //from those, find those that owe the maximum
+    for (GKManagedDriver *driver in possibleDrivers) {
+        int owedByDriver=[[self debtsOwedBy:driver] count];
+        NSLog(@"%@ owes %d people", driver.name, owedByDriver );
+
+        if  (owedByDriver>=maxOwed){
+            selectedDriver=driver;
+            maxOwed=owedByDriver;
+        }
+        
     }
     if (selectedDriver) return selectedDriver; else {
         if ([self.participants count]>0) NSLog(@"seems there is a debt cycle, please remove cycles!");
