@@ -70,10 +70,45 @@
                                 <action selector="addDriverItem:" destination="KrQ-ON-hgr" id="Vld-8M-Rbg"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Groups" id="8xs-Lc-CS8">
+                            <connections>
+                                <segue destination="Esh-kc-371" kind="push" id="AIv-Wq-IQ3"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
             </objects>
             <point key="canvasLocation" x="1037" y="-190"/>
+        </scene>
+        <!--Table View Controller - Groups-->
+        <scene sceneID="kzd-lO-WbU">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hde-K2-Jdn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewController id="Esh-kc-371" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="zYW-pM-qgG">
+                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="d6A-rJ-Zm9">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Esh-kc-371" id="H8B-55-AYI"/>
+                            <outlet property="delegate" destination="Esh-kc-371" id="ELy-0u-LAX"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Groups" id="KnU-Gg-kRl"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="1441" y="-802"/>
         </scene>
         <!--Set Driver Name-->
         <scene sceneID="Kk2-rO-lPy">

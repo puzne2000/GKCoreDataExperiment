@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "GLOBAL">
+         <PersistentStrings>
+            <PersistentString
+               value = "[self selectedRows]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[GKHistoryVCViewController tableView:didSelectRowAtIndexPath:]:GKHistoryVCViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "(int)[[[self tableView] cellForRowAtIndexPath:newIndex] isSelected]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[GKHistoryVCViewController tableView:cellForRowAtIndexPath:]:GKHistoryVCViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[GKHistoryVCViewController toggleSelectionSetForIndexPath:]:GKHistoryVCViewController.m">
+         <PersistentStrings>
+            <PersistentString
+               value = "[self selectedRows]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
